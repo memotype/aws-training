@@ -228,6 +228,29 @@ being made. Appropriate verification may include document review, formatting,
 static validation, tests, inspection of repository changes, and authorized AWS
 observations required by the active mode.
 
+Whenever a changeset includes Markdown files, Codex must run
+`markdownlint-cli2` against every Markdown file in that changeset before
+completing the task. When only specific files need to be linted, use
+`--no-globs` so the configured repository globs do not add other files. For
+example:
+
+```sh
+npx markdownlint-cli2 --no-globs README.md docs/standards/NAMING.md
+```
+
+Before creating any commit, Codex must run a full repository-wide lint without
+`--no-globs`, unless the operator expressly overrides that check:
+
+```sh
+npx markdownlint-cli2
+```
+
+Applicable lint failures must be resolved before completion or reported as a
+limitation when resolution would exceed the current task. A failing
+repository-wide lint blocks a commit unless the operator expressly authorizes
+proceeding despite the reported failures. Running either lint command does not
+itself authorize a commit or any other Git mutation.
+
 At handoff, Codex must report:
 
 - the material files, resources, or behavior changed

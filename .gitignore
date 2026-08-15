@@ -1,2 +1,6 @@
 *.swp
 *.swo
+.vscode
+.editorconfig
+node_modules/
+npm-debug.log*

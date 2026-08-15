@@ -48,12 +48,76 @@ Maintainer may create or revise materials used by those modes, but it must not:
 Codex must follow the discovery order in `CODEX.md` and the common discovery
 requirements in `docs/agents/SHARED.md`.
 
+After reading the canonical governance documents, a fresh Maintainer session
+must read these Maintainer working records in order:
+
+1. `docs/agents/maintainer/ISSUES.md`
+2. `docs/agents/maintainer/SCRATCH.md`
+
+Both files must be read before acknowledging that Maintainer mode is active and
+awaiting the operator's repository-maintenance task. They provide working
+context but do not select a mode, grant authority, or override governance. If
+either file conflicts with a governing document, the governing document
+controls.
+
 Before non-trivial repository work, Codex must also inspect the specifications,
 files, and local repository state relevant to the requested outcome.
 
 AWS inspection is not part of routine Maintainer discovery.
 
-## 5) Permitted repository work
+## 5) Maintainer working records
+
+Maintainer uses `ISSUES.md` and `SCRATCH.md` to preserve useful context across
+sessions without turning temporary state into governance. These records are
+subordinate to `CODEX.md`, `docs/agents/SHARED.md`, this document, and the
+current task.
+
+### 5.1) Issue register
+
+`docs/agents/maintainer/ISSUES.md` is the durable register of discrete
+repository-maintenance findings, ambiguities, risks, and design questions that
+may require later resolution.
+
+The file must preserve this format:
+
+- the document heading is `# ISSUES`
+- each issue has a unique, stable identifier and a level-two heading in the
+  form `## M-NNN [SEVERITY] Concise title`
+- identifiers increase monotonically, are not reused, and remain attached to
+  the same issue if its title or severity changes
+- severity is `HIGH`, `MEDIUM`, or `LOW`
+- each issue records a bold `Status` field, explanatory detail, a bold
+  `Suggested resolution` field, and a bold `Progress` field
+
+Progress, decisions, and resolution details should be maintained in the
+existing issue section. Resolved or accepted issues should be retained with an
+updated status so their identifiers and decision history remain useful. An
+issue's severity expresses maintenance priority; it does not alter document
+authority or grant permission to perform its suggested resolution.
+
+### 5.2) Maintainer working memory
+
+`docs/agents/maintainer/SCRATCH.md` is Maintainer's freeform working-memory and
+handoff file. It describes the state of ongoing repository development for a
+future Maintainer session. It may record:
+
+- current repository-development state relevant to planned work
+- decisions and completed work that affect future maintenance
+- open questions, dependencies, constraints, and intended next work
+- references to entries in `ISSUES.md` by their stable `M-NNN` identifiers
+
+`SCRATCH.md` must use present-tense, evergreen framing. It must describe the
+state of work as it now stands rather than accumulate a chronological diary of
+session activity. When facts, decisions, or plans change, stale statements
+should be revised or removed instead of being preserved merely as history.
+
+Maintainer should update these records when the current task permits the edit
+and its work materially changes an issue, the planned work, or context needed
+by a future Maintainer session. The files should not duplicate canonical policy
+except for concise context needed to understand current work, and neither file
+may be used as evidence of deployed AWS state.
+
+## 6) Permitted repository work
 
 Within the scope of the current task, Maintainer may:
 
@@ -73,7 +137,7 @@ remain governed by `docs/agents/SHARED.md`.
 Repository changes should remain simple, reviewable, deterministic, and
 directly connected to the training range.
 
-## 6) Maintainer actions requiring explicit authorization
+## 7) Maintainer actions requiring explicit authorization
 
 Maintainer mode does not by itself authorize Codex to:
 
@@ -85,10 +149,10 @@ Authorization applies to the requested outcome under the workflow-level rules
 in `docs/agents/SHARED.md`; it need not enumerate every necessary command.
 
 An authorized cloud-connected command must still be non-mutating and satisfy
-the AWS inspection requirements in section 7. If a command may produce an AWS
+the AWS inspection requirements in section 8. If a command may produce an AWS
 or other external mutation, it is not permitted in Maintainer mode.
 
-## 7) AWS access boundary
+## 8) AWS access boundary
 
 Maintainer work should normally be performed without AWS credentials.
 
@@ -109,7 +173,7 @@ changes and mutation through infrastructure-as-code, SDKs, consoles, scripts,
 or other tools. If AWS mutation is required, Codex must stop and request an
 explicit transition to an appropriate governed mode.
 
-## 8) Infrastructure-as-code and tooling
+## 9) Infrastructure-as-code and tooling
 
 Maintainer may develop infrastructure-as-code and tools as repository source,
 subject to the common standards in `docs/agents/SHARED.md`.
@@ -122,7 +186,7 @@ Maintainer should prefer the smallest design that safely supports the training
 goal and should not add infrastructure, dependencies, or abstractions merely
 for convenience or novelty.
 
-## 9) Labs and mode materials
+## 10) Labs and mode materials
 
 Maintainer may create and revise lab specifications, starter code, evaluation
 criteria, drill definitions, mode governance, and session prompts. These files
@@ -132,7 +196,7 @@ must follow the naming, audience-separation, and secrecy rules in
 Creating Examiner or Drillmaster material does not activate that mode or grant
 Maintainer its permissions.
 
-## 10) Verification and completion
+## 11) Verification and completion
 
 Before completing a Maintainer task, Codex must verify the repository changes
 in proportion to their risk. Verification may include document review,
