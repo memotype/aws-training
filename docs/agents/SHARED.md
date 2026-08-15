@@ -94,7 +94,7 @@ edit.
 Deleting or replacing substantial repository content outside the immediate
 task requires explicit operator authorization.
 
-## 5) Git and publication policy
+## 5) Git and external repository state
 
 The governing Git principle is: working-tree edits may be normal work when the
 active mode permits them, but Git repository-state mutations require explicit
@@ -130,6 +130,109 @@ also a staging operation and therefore requires authorization.
 Creating or updating commits, tags, branches, stashes, releases, pull requests,
 or other published artifacts must follow the same end-state authorization
 rule. A commit request does not imply permission to push or publish it.
+
+Working-tree state, Git repository state, and remote service state are distinct
+authorization domains. Creating, editing, labeling, commenting on, reopening,
+or closing a GitHub Issue changes durable remote state even though it does not
+stage files or alter local Git history. Requests for local file or Git outcomes
+do not implicitly authorize those remote mutations, and requests for remote
+outcomes do not implicitly authorize working-tree or Git mutations.
+
+The active mode or an explicit governed workflow may grant narrowly scoped
+read-only remote discovery. Possession of authentication or the ability to run
+a remote command is not authority to query other data or mutate remote state.
+Any authorized remote mutation must follow the end-state authorization rule in
+section 2 and remain limited to the requested outcome and targets.
+
+### 5.1) Version tags and releases
+
+Version tags name intentional project milestones and must use the form
+`vMAJOR.MINOR.PATCH`.
+
+The Git tag is the canonical version marker. A GitHub Release is optional
+publication metadata for that exact tag and does not replace or create a
+different version identity.
+
+Before `v1.0.0`, version numbers have these repository-specific meanings:
+
+- `v0.MINOR.0` identifies a meaningful development milestone while the
+  training range is still being designed or built.
+- `v0.MINOR.PATCH` may identify a correction to an already tagged development
+  milestone when a separate patch milestone is useful.
+- `v1.0.0` identifies the first version the operator considers a coherent,
+  usable AWS training range.
+
+After `v1.0.0`, use ordinary semantic-versioning judgment where practical:
+increment the major version for materially incompatible structural or workflow
+changes, the minor version for substantial backward-compatible capabilities,
+and the patch version for corrections.
+
+Tags are intentional, never automatic. Creating, moving, deleting, or pushing
+a tag, and creating, editing, or deleting a GitHub Release, each requires an
+explicit operator-authorized outcome. Preparing a release or editing
+`CHANGELOG.md` does not by itself authorize any of those mutations. A request
+to create a local tag does not implicitly authorize pushing it or creating a
+GitHub Release.
+
+A release tag must point to the exact reviewed commit containing the matching
+changelog entry. Before creating a tag, Codex must verify the intended target,
+confirm that the index and working tree are clean, and inspect existing local
+and remote tags to avoid collision or reuse. Published version tags must not be
+moved or reused as a correction mechanism; a new version should normally be
+created instead.
+
+### 5.2) Changelog
+
+`CHANGELOG.md` is the curated, user-facing record of material project changes.
+It is not a commit log, issue tracker, working-memory handoff, or chronological
+diary.
+
+After material work begins following the newest version tag, the changelog must
+contain one working entry headed `## Unreleased` above all released entries.
+Before the first version tag, that entry summarizes the material project state
+being built toward the first milestone. Immediately after a release, the file
+may contain only released entries until the next material change begins.
+
+The working entry must be tended as material work continues. It should read as
+a concise overview for a repository user asking what has changed since the
+newest tag, as though the current state were being released today. Related
+changes should be consolidated into durable outcomes rather than accumulated as
+individual edits. Minor wording, formatting, lint-only, and other
+non-material implementation changes should normally be omitted.
+
+The `Unreleased` entry and released entries must:
+
+- appear in reverse chronological order
+- summarize resulting project behavior, design, or capability rather than the
+  sequence of commits used to produce it
+- use only the relevant `Added`, `Changed`, `Fixed`, `Removed`, or `Security`
+  subsections
+- remain simple and accessible to a reader who does not know the implementation
+  history
+
+Issue references may be included when they materially improve the record, but
+the changelog must not reproduce issue histories or handoff state.
+
+When preparing a release, Maintainer must compare the working entry with the
+material repository changes since the previous tag, then consolidate, prune,
+and reword it into the overall release summary. The finalized entry must:
+
+- replace `## Unreleased` with `## vMAJOR.MINOR.PATCH - YYYY-MM-DD`
+- correspond exactly to the version tag being prepared
+- use the date on which the finalized release changes are committed
+- summarize all and only the material changes included in that milestone
+
+If the release commit will occur on a different date, the entry must be updated
+and finalized again before staging. Codex must finalize and review the
+changelog entry before staging release changes. Staging, committing, creating a
+tag, pushing it, and creating a GitHub Release occur only afterward and remain
+separately authorized outcomes.
+
+Once a release is tagged, its changelog entry is historical and must not be
+rewritten for subsequent project changes. A task may authorize a genuine
+documentation correction to a released entry; all other changes belong in a
+later `Unreleased` entry. Finalizing a release must not add an empty replacement
+`Unreleased` entry.
 
 ## 6) AWS operation safety
 

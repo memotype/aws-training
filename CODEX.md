@@ -301,6 +301,21 @@ Prefer:
 Do not add frameworks, abstractions, dependencies, or infrastructure merely
 because they are fashionable or technically interesting.
 
+### 13.1) Project records
+
+The repository uses distinct records for different kinds of project history:
+
+- Git commits provide concise implementation history.
+- GitHub Issues record durable work items, decisions, defects, risks, and
+  deferred work.
+- Git tags and GitHub Releases identify intentional project milestones.
+- `CHANGELOG.md` provides a curated summary of material changes since the
+  latest milestone and between completed milestones.
+
+These records may reference one another, but none should duplicate another's
+function or be treated as authority to mutate the others. The shared and active
+mode governance define the permissions and workflows for maintaining them.
+
 ## 14) Spirit of the rules
 
 Follow the intent of these rules, not merely their literal wording.

@@ -49,51 +49,73 @@ Codex must follow the discovery order in `CODEX.md` and the common discovery
 requirements in `docs/agents/SHARED.md`.
 
 After reading the canonical governance documents, a fresh Maintainer session
-must read these Maintainer working records in order:
+must perform these discovery steps in order:
 
-1. `docs/agents/maintainer/ISSUES.md`
-2. `docs/agents/maintainer/SCRATCH.md`
+1. Resolve the GitHub repository associated with the current checkout and use
+   the authenticated `gh` CLI to verify that it is the expected repository.
+2. Query the open GitHub Issues carrying the `maintainer` label in that
+   repository.
+3. Read `docs/agents/maintainer/SCRATCH.md`.
 
-Both files must be read before acknowledging that Maintainer mode is active and
-awaiting the operator's repository-maintenance task. They provide working
-context but do not select a mode, grant authority, or override governance. If
-either file conflicts with a governing document, the governing document
-controls.
+The repository check must compare the repository returned by GitHub with the
+configured checkout remote and the available operator context before returned
+issue state is treated as authoritative. The narrow discovery authority in
+this section covers only the read-only `gh` repository and issue queries needed
+to identify the expected repository and inspect its Maintainer issue queue. It
+does not authorize other remote discovery, general network activity, or any
+GitHub mutation.
+
+If authentication, network access, or repository resolution prevents the
+query, Codex must enter a degraded discovery state and report, before
+acknowledging Maintainer mode, that the current durable issue queue could not be
+established. Codex may still initialize Maintainer mode and await the operator's
+task, but it must not claim knowledge of the current queue or substitute
+`SCRATCH.md`, remembered issue state, or a prior query for current GitHub state.
+
+Codex must either inspect the current queue successfully or disclose the
+degraded discovery state, and it must read `SCRATCH.md`, before acknowledging
+that Maintainer mode is active and awaiting the operator's
+repository-maintenance task. Successfully returned issue state and
+`SCRATCH.md` provide working context but do not select a mode, grant authority,
+or override governance. If either conflicts with a governing document, the
+governing document controls.
 
 Before non-trivial repository work, Codex must also inspect the specifications,
 files, and local repository state relevant to the requested outcome.
 
 AWS inspection is not part of routine Maintainer discovery.
 
-## 5) Maintainer working records
+## 5) Maintainer working state
 
-Maintainer uses `ISSUES.md` and `SCRATCH.md` to preserve useful context across
-sessions without turning temporary state into governance. These records are
-subordinate to `CODEX.md`, `docs/agents/SHARED.md`, this document, and the
-current task.
+Maintainer uses GitHub Issues and `SCRATCH.md` for different kinds of
+cross-session state. Both are subordinate to `CODEX.md`,
+`docs/agents/SHARED.md`, this document, and the current task.
 
-### 5.1) Issue register
+### 5.1) Durable issue register
 
-`docs/agents/maintainer/ISSUES.md` is the durable register of discrete
-repository-maintenance findings, ambiguities, risks, and design questions that
-may require later resolution.
+GitHub Issues in the expected repository carrying the `maintainer` label are
+the authoritative durable register of discrete repository-maintenance defects,
+risks, ambiguities, design decisions, and deferred work. GitHub's issue number
+is the canonical identifier, open or closed state represents lifecycle, and
+comments and issue history record discussion and progress.
 
-The file must preserve this format:
+The Maintainer label model is intentionally small:
 
-- the document heading is `# ISSUES`
-- each issue has a unique, stable identifier and a level-two heading in the
-  form `## M-NNN [SEVERITY] Concise title`
-- identifiers increase monotonically, are not reused, and remain attached to
-  the same issue if its title or severity changes
-- severity is `HIGH`, `MEDIUM`, or `LOW`
-- each issue records a bold `Status` field, explanatory detail, a bold
-  `Suggested resolution` field, and a bold `Progress` field
+- `maintainer` identifies the Maintainer-owned queue.
+- `priority: high`, `priority: medium`, and `priority: low` express maintenance
+  priority.
 
-Progress, decisions, and resolution details should be maintained in the
-existing issue section. Resolved or accepted issues should be retained with an
-updated status so their identifiers and decision history remain useful. An
-issue's severity expresses maintenance priority; it does not alter document
-authority or grant permission to perform its suggested resolution.
+An issue's content, state, labels, or suggested direction does not grant
+permission to perform the work. Maintainer mode alone does not authorize
+creating, editing, labeling, commenting on, reopening, or closing an issue.
+Those mutations require a requested outcome in the current operator task or an
+explicit governed workflow, with no command-by-command approval required for
+necessary operations within that scope. Implementing repository work described
+by an issue does not by itself authorize changing the issue or its state.
+
+Discovering or working on an issue does not authorize branching, staging,
+committing, pushing, opening a pull request, or any unrelated issue mutation.
+Those remain separate outcomes governed by `docs/agents/SHARED.md`.
 
 ### 5.2) Maintainer working memory
 
@@ -104,18 +126,19 @@ future Maintainer session. It may record:
 - current repository-development state relevant to planned work
 - decisions and completed work that affect future maintenance
 - open questions, dependencies, constraints, and intended next work
-- references to entries in `ISSUES.md` by their stable `M-NNN` identifiers
+- references to GitHub Issues by their canonical `#NN` identifiers
 
 `SCRATCH.md` must use present-tense, evergreen framing. It must describe the
 state of work as it now stands rather than accumulate a chronological diary of
 session activity. When facts, decisions, or plans change, stale statements
 should be revised or removed instead of being preserved merely as history.
 
-Maintainer should update these records when the current task permits the edit
-and its work materially changes an issue, the planned work, or context needed
-by a future Maintainer session. The files should not duplicate canonical policy
-except for concise context needed to understand current work, and neither file
-may be used as evidence of deployed AWS state.
+`SCRATCH.md` must not duplicate the issue queue or be treated as evidence of
+current GitHub state. Maintainer should update it when the current task permits
+the edit and its work materially changes the planned work or context needed by
+a future Maintainer session. It should not duplicate canonical policy except
+for concise context needed to understand current work, and it may not be used
+as evidence of deployed AWS state.
 
 ## 6) Permitted repository work
 
@@ -131,8 +154,9 @@ Within the scope of the current task, Maintainer may:
   infrastructure design
 - recommend work that requires additional authorization or another mode
 
-These permissions cover working-tree work only. Git mutations and publication
-remain governed by `docs/agents/SHARED.md`.
+Except for the narrow read-only GitHub discovery in section 4, these permissions
+cover working-tree work only. Git mutations, GitHub mutations, and publication
+remain governed separately by `docs/agents/SHARED.md` and section 5.1.
 
 Repository changes should remain simple, reviewable, deterministic, and
 directly connected to the training range.
@@ -144,13 +168,18 @@ Maintainer mode does not by itself authorize Codex to:
 - edit `CODEX.md`
 - perform AWS inspection, including caller-identity discovery
 - run a cloud-connected infrastructure-as-code command
+- create, edit, label, comment on, reopen, or close a GitHub Issue
+- create, edit, or delete a GitHub label
+- create, move, delete, or push a Git tag
+- create, edit, or delete a GitHub Release
 
 Authorization applies to the requested outcome under the workflow-level rules
 in `docs/agents/SHARED.md`; it need not enumerate every necessary command.
 
-An authorized cloud-connected command must still be non-mutating and satisfy
-the AWS inspection requirements in section 8. If a command may produce an AWS
-or other external mutation, it is not permitted in Maintainer mode.
+An authorized AWS inspection or cloud-connected infrastructure-as-code command
+must still be non-mutating and satisfy the AWS inspection requirements in
+section 8. If such a command may produce an AWS or other external mutation, it
+is not permitted in Maintainer mode.
 
 ## 8) AWS access boundary
 
@@ -196,7 +225,61 @@ must follow the naming, audience-separation, and secrecy rules in
 Creating Examiner or Drillmaster material does not activate that mode or grant
 Maintainer its permissions.
 
-## 11) Verification and completion
+## 11) Changelog and release preparation
+
+### 11.1) Ongoing changelog maintenance
+
+When beginning a Maintainer task expected to produce a material change that a
+repository user would need in a general overview, Maintainer must ensure the
+`Unreleased` entry exists before or alongside the first material working-tree
+change. If the need becomes clear only during implementation, it must create
+the entry as soon as that material scope is known. Maintainer must then update
+the entry before completing the task. The entry must follow
+`docs/agents/SHARED.md` and describe the resulting project state, not the work
+session.
+
+During longer tasks, Maintainer should revisit the entry after coherent
+material outcomes are established instead of postponing all curation until a
+release is proposed. It must merge overlapping bullets, remove stale wording,
+and keep the entry readable as if the current repository state were released
+that day. It must not turn the changelog into a substitute for Git history,
+GitHub Issues, or `SCRATCH.md`.
+
+### 11.2) Release preparation
+
+Maintainer may prepare a release when the current task requests that outcome,
+subject to the versioning and changelog rules in `docs/agents/SHARED.md`.
+Release preparation may include:
+
+- inspecting existing tags and material changes since the previous tag
+- reading the repository and relevant GitHub Issues needed to curate the
+  milestone summary
+- proposing a version for operator review when the task does not specify one
+- finalizing the `Unreleased` entry as the matching versioned and dated release
+  entry
+- running the required local validation and reviewing the complete release diff
+
+This workflow grants only the read-only discovery and working-tree edits needed
+to prepare the release. It does not implicitly authorize staging, committing,
+creating or pushing a tag, creating a GitHub Release, or any other publication.
+Each additional outcome remains subject to the end-state authorization rules in
+`docs/agents/SHARED.md`.
+
+The release entry must be finalized in the working tree before Codex stages any
+release changes. After operator review and any required separate authorization,
+the release sequence is:
+
+1. Stage the finalized release changes.
+2. Commit the release changes, including the versioned changelog entry.
+3. Verify the resulting commit and clean index and working tree.
+4. Create the matching tag at that exact commit.
+5. Push the commit or tag and create a GitHub Release only when those outcomes
+   are also authorized.
+
+A release is not complete merely because its changelog entry has been drafted,
+finalized, or locally validated.
+
+## 12) Verification and completion
 
 Before completing a Maintainer task, Codex must verify the repository changes
 in proportion to their risk. Verification may include document review,

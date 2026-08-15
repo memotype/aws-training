@@ -3,8 +3,8 @@
 This file is Maintainer's working memory for repository-development handoffs.
 It supplies current context and plans but does not select a mode, grant
 authority, or override governance. A fresh session reads it after the canonical
-governance documents and `ISSUES.md`, then acknowledges Maintainer mode and
-waits for the operator's task.
+governance documents and the required Maintainer GitHub issue discovery
+attempt, then acknowledges Maintainer mode and waits for the operator's task.
 
 ## Current phase
 
@@ -17,30 +17,22 @@ training begins. Its planned responsibilities are:
   `docs/`
 - small repository-maintenance and validation utilities under `tools/`
 
-Maintainer governance and its session prompt are present. Examiner and
-Drillmaster governance and session prompts remain planned. No infrastructure as
-code tool, shared infrastructure design, or lab contract is selected yet.
+Maintainer governance, its session prompt, the GitHub issue-backed maintenance
+workflow, and the changelog and milestone model are present in repository
+source. Examiner and Drillmaster governance and session prompts are not yet
+implemented. No infrastructure-as-code tool, shared infrastructure design, lab
+framework, or lab contract is selected yet.
 
-## Working governance state
+## Handoff boundary
 
-Maintainer sessions use two non-governing working records:
+GitHub Issues carrying the `maintainer` label are the durable source for
+discrete work, decisions, priority, and lifecycle. A fresh query establishes
+their current state. This file retains only broader context needed across
+Maintainer sessions and must not be treated as a snapshot of the issue queue.
 
-- `ISSUES.md` holds stable, prioritized maintenance findings.
-- `SCRATCH.md` holds this evergreen handoff state and future plans.
-
-The issue register contains M-001 through M-012. M-002 is resolved: root
-governance now separates absolute AWS prohibitions from actions that a mode and
-task may conditionally authorize. M-001 and M-004 are medium-priority open
-design decisions, while M-003 is low priority. M-012 records the replacement
-of the stale handoff snapshot with this working state.
-
-The Maintainer initialization prompt intentionally requires Codex to
-acknowledge the active mode and wait for a separate operator task. M-011 tracks
-that accepted usability tradeoff.
-
-Shared governance requires Markdown files in a changeset to be linted. It also
-requires a repository-wide Markdown lint before a commit unless the operator
-expressly overrides the check.
+The Maintainer session continues to use the deliberate initialization
+handshake: complete discovery, acknowledge the mode, and wait for a separate
+operator task.
 
 ## Repository tooling
 
@@ -57,6 +49,14 @@ The npm manifest and lock file preserve the Markdown lint dependencies.
 logs, and Vim swap files. Infrastructure-as-code ignore rules remain deferred
 until the tool and runtime artifact conventions are selected.
 
+## Release model
+
+Project milestones use intentional SemVer-shaped version tags. Release
+preparation curates only material milestone changes into `CHANGELOG.md`.
+The current `Unreleased` entry is being curated toward the first intentional
+milestone. Its version remains an operator decision. The entry presents the
+user-facing delta without duplicating commits, GitHub Issues, or this handoff.
+
 ## AWS state boundary
 
 Repository source describes governance and intended future design only. It
@@ -64,23 +64,21 @@ does not establish current deployed AWS state. No live AWS evidence is recorded
 for this maintenance phase, and Maintainer performs no AWS mutation or
 deployment.
 
-## Planned maintenance
+## Undeveloped areas
 
-The next planned design task is to draft Examiner governance and its session
-prompt. M-001, concerning governance activation, does not block drafting but
-should be resolved before newly written mode governance is activated. M-004,
-concerning ownership of routine AWS deployment and cleanup, should be decided
-while the overall mode set is designed. M-003 is lower-priority wording
-cleanup.
+After this checkpoint, the operator intends the next fresh Maintainer session
+to address #1 and then #2. Resolving the general governance-activation boundary
+in #1 should precede the root-versus-Maintainer AWS discovery wording in #2.
+This is planning context only: the live issue query establishes their state,
+and the next operator task must separately authorize the repository outcome,
+any `CODEX.md` edit, and any GitHub Issue mutation.
 
-Later repository work includes:
+The live Maintainer issue queue provides the authoritative discrete work and
+priorities. Broader areas not yet developed include:
 
-- drafting Drillmaster governance and its session prompt
+- Examiner and Drillmaster governance and session prompts
 - defining standards for AWS scope, credentials, naming, tagging, and cost
 - defining architecture and the boundary between shared and lab infrastructure
 - writing repository, `infra/`, and `labs/` documentation
 - designing the lab template contract
 - selecting an infrastructure-as-code tool and reproducible local conventions
-
-There is no pre-authorized next implementation step. A fresh Maintainer session
-waits for the operator to choose and authorize the next repository outcome.
