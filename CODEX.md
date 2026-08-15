@@ -140,21 +140,52 @@ denial rather than attempting privilege escalation.
 
 Codex must operate according to least privilege and minimum necessary change.
 
-Unless specifically authorized by governing documents and the current task,
-Codex must not:
+### 7.1) Absolute prohibitions
 
-- modify root-account settings
-- create or expose root credentials
-- alter billing or payment settings
+No operating mode, lower-authority document, lab, exercise, drill, or ordinary
+task may authorize Codex to:
+
+- create, expose, or use AWS root-user credentials
+- modify root-user security settings, billing or payment settings, or account
+  closure controls
 - close the AWS account
-- create unrestricted administrative credentials
-- weaken the IAM controls that constrain Codex itself
-- disable cost or safety controls
+- create or grant unrestricted administrative identities, access, or
+  credentials
+- weaken, bypass, replace, or evade the IAM controls that constrain Codex
+- disable or evade account-level cost, security, or safety guardrails
 - delete cryptographic keys or schedule destructive key deletion
+- perform account-wide, Region-wide, or otherwise indiscriminate deletion or
+  destructive modification
+- deliberately destroy the only recoverable copy of training data, state,
+  credentials, keys, or restoration material
 - modify resources outside the designated training scope
-- create resources with materially different cost characteristics merely for
-  convenience
+- incur materially different costs merely for convenience or spectacle rather
+  than a defined training need
 - conceal unexpected AWS changes, failures, or charges
+
+Changing an absolute prohibition requires explicit operator authorization to
+edit this file. Such an edit is a repository-governance change, not authority
+to perform the corresponding AWS action. A broadened permission does not
+become active in the governance session in which it is written. The operator
+must accept the change and begin a new governance session, either in a new
+conversation or by explicitly reinitializing or reaffirming the active mode
+under the revised governance.
+
+### 7.2) Conditionally authorizable AWS actions
+
+An AWS action not prohibited above remains forbidden unless the active mode
+permits that type of action and the current task authorizes the requested
+outcome. Any authorized action must:
+
+- stay within the designated training scope
+- use the minimum necessary target set and permissions
+- satisfy the applicable identity, account, Region, and resource checks
+- have bounded and understood security, availability, persistence, and cost
+  effects
+- include a recovery or cleanup approach when it is disruptive or destructive
+
+A mode may impose stricter restrictions. It may not create an exception to an
+absolute prohibition.
 
 When uncertain whether an AWS action is destructive, expensive, persistent,
 or outside training scope, treat it as potentially unsafe and stop before

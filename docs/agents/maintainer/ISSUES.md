@@ -5,7 +5,7 @@ findings. It records problems and possible resolutions, but it does not select
 an operating mode, grant authority, or override `CODEX.md`,
 `docs/agents/SHARED.md`, or a mode governance document.
 
-## M-001 [HIGH] Governance changes lack an activation boundary
+## M-001 [MEDIUM] Governance changes lack an activation boundary
 
 **Status:** Open
 
@@ -26,11 +26,13 @@ the changes and reinitializes or reaffirms the active mode. Also define whether
 the authoritative version comes from the working tree, the current commit, or a
 session initialization snapshot.
 
-**Progress:** No activation rule has been selected.
+**Progress:** The resolution of M-002 establishes a narrow activation boundary
+for any future relaxation of an absolute AWS prohibition. The activation rule
+for other governance changes remains undecided.
 
 ## M-002 [HIGH] Absolute AWS prohibitions are conditionally worded
 
-**Status:** Open
+**Status:** Resolved
 
 `CODEX.md` introduces its AWS safety list with "Unless specifically authorized
 by governing documents and the current task." The list then includes actions
@@ -48,10 +50,17 @@ that require an appropriate mode plus explicit task authority. Define the
 exception or governance-amendment process for any absolute rule that the
 operator may legitimately need to change.
 
-**Progress:** The candidate absolute and conditional categories have not been
-agreed.
+**Progress:** `CODEX.md` now separates absolute prohibitions from conditionally
+authorizable AWS actions. Absolute prohibitions cover root-user and account
+closure actions, unrestricted administration, evasion of Codex's IAM boundary,
+account-level guardrails, destructive key deletion, indiscriminate destruction,
+loss of the only recovery copy, out-of-scope resources, unjustified material
+cost, and concealment of unexpected effects. Lower authorities cannot create
+exceptions. Any future relaxation requires an explicitly authorized edit to
+`CODEX.md`, operator acceptance, and a fresh or reaffirmed governance session;
+the edit itself does not authorize the AWS action.
 
-## M-003 [HIGH] AWS discovery requirements conflict with Maintainer access limits
+## M-003 [LOW] AWS discovery requirements conflict with Maintainer access limits
 
 **Status:** Open
 
@@ -73,7 +82,7 @@ memory.
 **Progress:** Maintainer practice currently follows the restrictive
 interpretation, but the text has not been reconciled.
 
-## M-004 [HIGH] No mode owns ordinary AWS deployment and cleanup
+## M-004 [MEDIUM] No mode owns ordinary AWS deployment and cleanup
 
 **Status:** Open design decision
 

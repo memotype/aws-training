@@ -28,9 +28,11 @@ Maintainer sessions use two non-governing working records:
 - `ISSUES.md` holds stable, prioritized maintenance findings.
 - `SCRATCH.md` holds this evergreen handoff state and future plans.
 
-The issue register contains M-001 through M-012. M-001 through M-004 are the
-highest-priority open governance decisions. M-012 records the replacement of
-the stale handoff snapshot with this working state.
+The issue register contains M-001 through M-012. M-002 is resolved: root
+governance now separates absolute AWS prohibitions from actions that a mode and
+task may conditionally authorize. M-001 and M-004 are medium-priority open
+design decisions, while M-003 is low priority. M-012 records the replacement
+of the stale handoff snapshot with this working state.
 
 The Maintainer initialization prompt intentionally requires Codex to
 acknowledge the active mode and wait for a separate operator task. M-011 tracks
@@ -64,17 +66,15 @@ deployment.
 
 ## Planned maintenance
 
-The next governance work is to review and resolve the open issues in
-`ISSUES.md`, beginning with the high-priority decisions:
-
-- M-001: governance activation boundary
-- M-002: absolute versus conditionally authorizable AWS prohibitions
-- M-003: AWS discovery wording versus Maintainer access restrictions
-- M-004: ownership of routine AWS deployment and cleanup
+The next planned design task is to draft Examiner governance and its session
+prompt. M-001, concerning governance activation, does not block drafting but
+should be resolved before newly written mode governance is activated. M-004,
+concerning ownership of routine AWS deployment and cleanup, should be decided
+while the overall mode set is designed. M-003 is lower-priority wording
+cleanup.
 
 Later repository work includes:
 
-- drafting Examiner governance and its session prompt
 - drafting Drillmaster governance and its session prompt
 - defining standards for AWS scope, credentials, naming, tagging, and cost
 - defining architecture and the boundary between shared and lab infrastructure
