@@ -66,13 +66,6 @@ deployment.
 
 ## Undeveloped areas
 
-After this checkpoint, the operator intends the next fresh Maintainer session
-to address #1 and then #2. Resolving the general governance-activation boundary
-in #1 should precede the root-versus-Maintainer AWS discovery wording in #2.
-This is planning context only: the live issue query establishes their state,
-and the next operator task must separately authorize the repository outcome,
-any `CODEX.md` edit, and any GitHub Issue mutation.
-
 The live Maintainer issue queue provides the authoritative discrete work and
 priorities. Broader areas not yet developed include:
 

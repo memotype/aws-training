@@ -55,15 +55,23 @@ must perform these discovery steps in order:
    the authenticated `gh` CLI to verify that it is the expected repository.
 2. Query the open GitHub Issues carrying the `maintainer` label in that
    repository.
+   - If the query succeeds, include counts for each priority and for
+     unprioritized issues in the confirmation message.
+   - If the query cannot be completed, check
+     `https://www.githubstatus.com/` for a reported GitHub Issues outage,
+     summarize the reported status, and continue under the degraded-discovery
+     procedure below. Do not treat the status page as evidence of the current
+     issue queue.
 3. Read `docs/agents/maintainer/SCRATCH.md`.
 
 The repository check must compare the repository returned by GitHub with the
 configured checkout remote and the available operator context before returned
 issue state is treated as authoritative. The narrow discovery authority in
 this section covers only the read-only `gh` repository and issue queries needed
-to identify the expected repository and inspect its Maintainer issue queue. It
-does not authorize other remote discovery, general network activity, or any
-GitHub mutation.
+to identify the expected repository and inspect its Maintainer issue queue. If
+the issue query cannot be completed, it also covers one read-only request to
+`https://www.githubstatus.com/`. It does not authorize other remote discovery,
+general network activity, or any GitHub mutation.
 
 If authentication, network access, or repository resolution prevents the
 query, Codex must enter a degraded discovery state and report, before
@@ -116,6 +124,13 @@ by an issue does not by itself authorize changing the issue or its state.
 Discovering or working on an issue does not authorize branching, staging,
 committing, pushing, opening a pull request, or any unrelated issue mutation.
 Those remain separate outcomes governed by `docs/agents/SHARED.md`.
+
+Maintainer must apply the GitHub Issue resolution and closure lifecycle in
+section 5.1 of `docs/agents/SHARED.md`. When repository work is fully
+implemented and validated but not yet published, Maintainer must leave the
+issue open, report it as **ready to close after publication**, and identify the
+separately authorized Git and GitHub outcomes still required. This handoff does
+not create a label or custom issue state.
 
 ### 5.2) Maintainer working memory
 

@@ -144,7 +144,40 @@ a remote command is not authority to query other data or mutate remote state.
 Any authorized remote mutation must follow the end-state authorization rule in
 section 2 and remain limited to the requested outcome and targets.
 
-### 5.1) Version tags and releases
+### 5.1) GitHub Issue resolution and closure
+
+Closing an implementation-backed GitHub Issue represents durable resolution in
+the canonical published repository, not completion in a working tree or an
+unpublished local commit. For repository changes, canonical published state is
+the state of the expected GitHub repository's default branch unless an
+authorized governed workflow explicitly designates another canonical branch.
+In a direct workflow, the resolving commit must be pushed to that branch; in a
+branch or pull-request workflow, the resolving changes must be merged into it.
+An ordinary issue closure does not require a version tag or GitHub Release.
+
+Implementation, committing, publication or merge, and issue closure are
+separately authorized outcomes under section 2. Authority for one does not
+imply authority for another, and the existence of an issue does not create an
+automatic branch, commit, push, merge, or closure workflow.
+
+Immediately before closing a repository-backed issue, Codex must verify through
+GitHub that the resolving state is present on the expected canonical branch in
+the expected repository. A matching local commit or a previous push or merge
+attempt is not evidence of publication. Codex must not arrange automatic issue
+closure through a commit or pull request because that would bypass this
+verification step. Until publication and verification occur, a fully
+implemented and validated issue remains open and must be handed off as **ready
+to close after publication**. This handoff does not require a new label or
+custom issue state.
+
+An issue may close without a repository change when the authorized outcome is
+a non-implementation disposition whose durable resolution is fully represented
+by the issue itself, such as not planned, duplicate, invalid or superseded
+work, or an issue-contained decision. If resolving a decision also requires
+governance, documentation, or other repository changes, the repository-backed
+lifecycle applies.
+
+### 5.2) Version tags and releases
 
 Version tags name intentional project milestones and must use the form
 `vMAJOR.MINOR.PATCH`.
@@ -181,7 +214,7 @@ and remote tags to avoid collision or reuse. Published version tags must not be
 moved or reused as a correction mechanism; a new version should normally be
 created instead.
 
-### 5.2) Changelog
+### 5.3) Changelog
 
 `CHANGELOG.md` is the curated, user-facing record of material project changes.
 It is not a commit log, issue tracker, working-memory handoff, or chronological

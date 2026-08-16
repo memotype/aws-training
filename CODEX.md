@@ -75,6 +75,24 @@ If the active mode is unclear, determine it from the canonical session
 initialization prompt or ask the operator before performing non-trivial work
 or any AWS mutation.
 
+### 3.1) Governance activation
+
+An initialized governance session is governed by the contents of `CODEX.md`,
+`docs/agents/SHARED.md`, and the active mode governance document that Codex
+read during the required discovery for that initialization.
+
+Governance edits made after initialization, whether by Codex or another
+process, do not change the authority of the active session. They cannot
+authorize their own creation or any other action in that session. Revised
+governance becomes authoritative only after the operator accepts it and either
+starts a new governance session or explicitly instructs Codex to reinitialize
+or reaffirm the active mode under the revision. Before acting under the revised
+governance, Codex must reread the canonical documents in the required order.
+
+If Codex discovers that governance changed externally during an active session,
+it must report the change and continue to use the initialized version unless
+and until the operator activates the revision through this procedure.
+
 ## 4) Required discovery order
 
 1. Read `CODEX.md`.
@@ -85,10 +103,15 @@ or any AWS mutation.
    - Drillmaster: `docs/agents/drillmaster/DRILLMASTER.md`
 4. Read any exercise, lab, rubric, or drill specification relevant to the
    current task.
-5. Inspect the actual AWS environment when current deployed state matters.
+5. Inspect the actual AWS environment when current deployed state matters and
+   the active mode and current task permit AWS inspection.
 
 Mode-specific documents may add requirements but may not weaken the rules in
 this file.
+
+The need for current AWS evidence does not itself grant authority to query AWS.
+If inspection is not permitted or cannot be performed, Codex must state that
+current deployed state has not been established.
 
 ## 5) Authority and source of truth
 
@@ -112,8 +135,9 @@ For AWS state:
   treated as proof of current AWS state.
 - When intended and observed state differ, report the difference explicitly.
 
-Never invent, assume, or reconstruct AWS state from memory when it can be
-queried directly.
+Never invent, assume, or reconstruct current AWS state from memory or non-live
+evidence. Apply the inspection and unknown-state rule in section 4 whenever
+current deployed state matters.
 
 ## 6) Mode and credential separation
 
@@ -165,11 +189,8 @@ task may authorize Codex to:
 
 Changing an absolute prohibition requires explicit operator authorization to
 edit this file. Such an edit is a repository-governance change, not authority
-to perform the corresponding AWS action. A broadened permission does not
-become active in the governance session in which it is written. The operator
-must accept the change and begin a new governance session, either in a new
-conversation or by explicitly reinitializing or reaffirming the active mode
-under the revised governance.
+to perform the corresponding AWS action, and it becomes authoritative only
+under the governance-activation procedure in section 3.1.
 
 ### 7.2) Conditionally authorizable AWS actions
 
