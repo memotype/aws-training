@@ -357,7 +357,91 @@ Codex should prefer:
 Tools capable of AWS mutation must require deliberate invocation and enforce
 the applicable mode, identity, account, Region, and resource-scope checks.
 
-## 11) Verification and handoff
+## 11) SPDX and REUSE licensing compliance
+
+The repository uses SPDX short-form license expressions and adopts the
+[REUSE Specification 3.3](https://reuse.software/spec-3.3/) as its operational
+profile for file-level copyright and licensing information. `LICENSE.md`
+defines which project material is licensed under `MIT` and which is licensed
+under `CC-BY-4.0`.
+
+Every file covered by REUSE 3.3 must have complete and accurate licensing
+information associated with it:
+
+- at least one `SPDX-FileCopyrightText` notice identifying the actual copyright
+  holder and applicable publication year or years
+- at least one `SPDX-License-Identifier` tag containing a valid SPDX license
+  expression that accurately describes the file
+
+Existing copyright and licensing notices must be preserved. Codex must not
+attribute third-party work to the operator, replace a third party's license, or
+claim rights that the operator does not hold.
+
+Commentable files must carry their licensing information in a comment header as
+near the beginning as the file format safely permits. The header must not
+precede or invalidate a required shebang, encoding declaration, document type,
+or other format-sensitive prefix. An uncommentable file must use an adjacent
+`.license` file. `REUSE.toml` may be used only when individual headers or
+sidecars are impractical, and each mapping must be explicit and reviewable.
+
+The license expression must follow the material boundary in `LICENSE.md`:
+
+- use `MIT` for code, infrastructure configuration, automation, and other
+  machine-oriented technical material
+- use `CC-BY-4.0` for governance, documentation, and other human-oriented
+  material
+- select one license for a normal project file according to its primary purpose
+- treat small or illustrative code, commands, configuration fragments, and
+  other technical examples in a human-oriented document as part of that
+  `CC-BY-4.0` document; do not create mid-document license changes or SPDX
+  snippet tags for ordinary embedded examples
+- when embedded technical material becomes substantial enough to be
+  independently reusable, prefer moving it into a separate `MIT`-licensed file
+  and referencing it from the documentation
+
+Primary purpose and reasonable engineering judgment control this boundary; no
+numerical size threshold applies. SPDX snippet metadata is exceptional, not a
+normal project workflow. It may be used when necessary to represent genuinely
+different licensing that cannot be cleanly separated, such as incorporated
+third-party material. Existing third-party copyrights and licenses must remain
+intact, and material the project lacks authority to relicense must not be
+silently absorbed under a containing file's project license.
+
+License texts must be plain-text files named
+`LICENSES/<SPDX-License-Identifier>.txt`. The directory must contain a license
+text for every license referenced by covered files and no unused or unrelated
+files. Each license text must be an unmodified copy of the applicable
+authoritative license text. Copyright holders and years, SPDX metadata,
+explanations, and other project-specific content must not be substituted into
+or added to canonical license texts. Project copyright ownership belongs in
+file-level metadata; REUSE excludes the license texts themselves from covered
+files.
+
+For original project files authored by the operator, file-level copyright
+metadata must identify `Isaac Freeman <memotype@gmail.com>` as the copyright
+holder and use the actual applicable year or years. For current original
+material created in 2026, the normal form is:
+
+```text
+SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
+SPDX-License-Identifier: MIT
+```
+
+The license identifier must instead be `CC-BY-4.0` when that is the file's
+license. This convention must not be assigned mechanically to third-party
+material or work whose copyright ownership has not been established.
+
+Every repository change must preserve accurate licensing information for each
+file it adds, modifies, moves, or incorporates. Before completing repository
+work and before creating a commit, Codex must run the repository's pinned REUSE
+validator across the full repository and resolve every applicable failure.
+Running the validator does not authorize a commit or any other Git mutation.
+
+This section governs copyright and license metadata. It does not require an
+SPDX software bill of materials unless the current task or a lower-authority
+repository standard separately requires one.
+
+## 12) Verification and handoff
 
 Codex must verify completed work in proportion to its risk and to the claims
 being made. Appropriate verification may include document review, formatting,

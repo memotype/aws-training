@@ -8,6 +8,9 @@
   "config": {
     "default": true,
     "MD032": false,
+    "MD024": {
+      "siblings_only": true
+    },
     "MD013": {
       "line_length": 80,
       "code_blocks": false,

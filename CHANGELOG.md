@@ -4,6 +4,16 @@ This file records curated material changes included in tagged project
 milestones and the material changes currently being prepared for the next
 milestone.
 
+## Unreleased
+
+### Added
+
+- A repository-wide MIT and CC BY 4.0 licensing policy with unmodified
+  canonical license texts and REUSE 3.3 compliance rules. Files use one license
+  according to their primary purpose, ordinary technical examples inherit the
+  license of their human-oriented document, and covered files require accurate
+  file-level copyright and license metadata and validation.
+
 ## v0.1.0 - 2026-08-16
 
 ### Added
