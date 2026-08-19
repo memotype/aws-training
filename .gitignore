@@ -1,6 +1,10 @@
+# SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
+# SPDX-License-Identifier: MIT
+
 *.swp
 *.swo
 .vscode
 .editorconfig
+.venv/
 node_modules/
 npm-debug.log*

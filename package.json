@@ -2,5 +2,6 @@
   "dependencies": {
     "markdownlint": "^0.40.0",
     "markdownlint-cli2": "^0.22.1"
-  }
+  },
+  "license": "SEE LICENSE IN LICENSE.md"
 }

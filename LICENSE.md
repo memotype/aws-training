@@ -59,5 +59,17 @@ numerical size threshold applies.
 Contributions are licensed according to the same boundary unless a contribution
 includes an explicit, compatible license notice accepted by the project.
 
+## Validation
+
+Run the repository's pinned REUSE validator from the repository root:
+
+```sh
+uv run --project tools/reuse --locked --isolated reuse --root . lint
+```
+
+The isolated uv project pins its supported uv version and resolves REUSE 6.2.0
+and all transitive dependencies in `tools/reuse/uv.lock`. The command uses an
+isolated environment outside the repository working tree.
+
 [spdx-mit]: https://raw.githubusercontent.com/spdx/license-list-data/main/text/MIT.txt
 [cc-by-legal-code]: https://creativecommons.org/licenses/by/4.0/legalcode.txt

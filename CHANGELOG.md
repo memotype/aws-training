@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # Changelog
 
 This file records curated material changes included in tagged project
@@ -9,10 +14,17 @@ milestone.
 ### Added
 
 - A repository-wide MIT and CC BY 4.0 licensing policy with unmodified
-  canonical license texts and REUSE 3.3 compliance rules. Files use one license
-  according to their primary purpose, ordinary technical examples inherit the
-  license of their human-oriented document, and covered files require accurate
-  file-level copyright and license metadata and validation.
+  canonical license texts, file-level SPDX metadata, and uv-locked REUSE 6.2.0
+  validation. Files use one license according to their primary purpose, and
+  ordinary technical examples inherit the license of their human-oriented
+  document.
+
+### Changed
+
+- Strengthened repository-wide tooling governance to favor ecosystem-native
+  metadata, locking, environments, commands, and professional conventions,
+  reserving custom scripts and abstractions for justified project-specific
+  orchestration.
 
 ## v0.1.0 - 2026-08-16
 

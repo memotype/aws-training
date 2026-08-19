@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # Shared Agent Governance
 
 ## 1) Purpose and applicability
@@ -344,9 +349,95 @@ be required.
 Installing or removing dependencies that materially affect the repository or
 host environment requires explicit operator authorization.
 
+This section applies to dependency and environment management, validation,
+builds, infrastructure tooling, test execution, automation, and other current
+or future repository tooling.
+
 New tools, dependencies, abstractions, and automation must earn their place by
-making the repository safer, more reproducible, or easier to understand.
-Codex should prefer:
+making the repository safer, more reproducible, or easier to understand. Codex
+must prefer solutions recognizable and maintainable in a professionally
+operated software or infrastructure repository, in this order:
+
+1. Native capabilities of the language, package manager, build system,
+   infrastructure tool, or platform already in use.
+2. Widely adopted ecosystem-standard tools and file conventions.
+3. Small repository-specific orchestration around those standard mechanisms.
+4. Bespoke scripts or custom formats only when the preceding options do not
+   reasonably satisfy the requirement.
+
+"Small" and "simple" describe appropriate scope; they do not justify inventing
+a local convention when an established ecosystem mechanism already fits.
+
+### 10.1) Dependencies and environments
+
+Dependencies and tool versions should use the selected ecosystem's normal
+declarative metadata, deterministic lock files, reproducible environment
+creation, and conventional entry points wherever practical. Prefer mechanisms
+understood by common editors, CI systems, dependency scanners, and engineering
+tools.
+
+Codex must avoid custom dependency manifests, custom lock conventions,
+hand-maintained version files, and script-based dependency installers when the
+ecosystem provides an established mechanism for those concerns. It must not
+introduce a second dependency-management mechanism for the same ecosystem
+without a concrete need.
+
+### 10.2) Repository scripts and abstractions
+
+Repository scripts are appropriate when they provide genuine project-specific
+orchestration, such as:
+
+- composing multiple standard tools into one repository workflow
+- enforcing repository-specific preconditions or safety checks
+- normalizing a complex but conventional invocation
+- coordinating operations across tools or ecosystems
+- providing a stable project entry point over an otherwise conventional
+  implementation
+
+Scripts should normally be thin orchestration layers. Codex must not create a
+bespoke wrapper script merely to wrap one straightforward command when a
+conventional project entry-point mechanism already serves that purpose,
+replace ecosystem-provided dependency or environment management, duplicate a
+mature capability, conceal a nonstandard convention, or avoid the selected
+toolchain's normal metadata and configuration files.
+
+Conventional project entry points supplied by the selected package manager,
+build system, or similar ecosystem tooling are appropriate when they improve
+discoverability and match normal professional practice.
+
+Every wrapper, helper, custom configuration format, or abstraction must justify
+itself. Before introducing one, Codex must determine whether the outcome can be
+expressed clearly through standard configuration, project metadata, or the
+native command interface. A repository-specific abstraction is justified only
+when it materially improves safety, reproducibility, clarity, or orchestration
+beyond the standard mechanism. When one is necessary, its inputs, outputs,
+side effects, and failure behavior must be explicit.
+
+The repository must remain understandable to an experienced engineer without
+requiring them to reverse-engineer conventions invented specifically for this
+project.
+
+### 10.3) Tool selection
+
+Codex must not choose tooling merely because it is installed on the current
+host or convenient during an agent session. Selection must consider:
+
+- current professional adoption and maintenance
+- ecosystem fit and interoperability with standard tooling
+- reproducibility and deterministic dependency and version handling
+- portability between developer machines and CI
+- security and supply-chain implications
+- clarity to a competent engineer encountering the repository for the first
+  time
+- long-term maintenance cost
+
+Prefer an established modern convention over a legacy or improvised approach
+when the modern convention is mature, widely supported, and appropriate for
+the repository. Do not chase novelty: newer tooling is not automatically
+better than an established solution.
+
+Within these professional conventions, Codex should prefer the smallest
+toolchain that satisfies the requirement, including:
 
 - small tools with explicit inputs and outputs
 - standard formats and native capabilities
@@ -411,7 +502,7 @@ License texts must be plain-text files named
 `LICENSES/<SPDX-License-Identifier>.txt`. The directory must contain a license
 text for every license referenced by covered files and no unused or unrelated
 files. Each license text must be an unmodified copy of the applicable
-authoritative license text. Copyright holders and years, SPDX metadata,
+authoritative license text. Project ownership notices and years, SPDX metadata,
 explanations, and other project-specific content must not be substituted into
 or added to canonical license texts. Project copyright ownership belongs in
 file-level metadata; REUSE excludes the license texts themselves from covered
@@ -422,10 +513,14 @@ metadata must identify `Isaac Freeman <memotype@gmail.com>` as the copyright
 holder and use the actual applicable year or years. For current original
 material created in 2026, the normal form is:
 
+<!-- REUSE-IgnoreStart -->
+
 ```text
 SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
 SPDX-License-Identifier: MIT
 ```
+
+<!-- REUSE-IgnoreEnd -->
 
 The license identifier must instead be `CC-BY-4.0` when that is the file's
 license. This convention must not be assigned mechanically to third-party

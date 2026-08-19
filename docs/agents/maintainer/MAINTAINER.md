@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # Maintainer Mode Governance
 
 ## 1) Purpose
