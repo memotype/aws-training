@@ -529,8 +529,9 @@ material or work whose copyright ownership has not been established.
 Every repository change must preserve accurate licensing information for each
 file it adds, modifies, moves, or incorporates. Before completing repository
 work and before creating a commit, Codex must run the repository's pinned REUSE
-validator across the full repository and resolve every applicable failure.
-Running the validator does not authorize a commit or any other Git mutation.
+validator across the full repository using the canonical invocation documented
+in `LICENSE.md` and resolve every applicable failure. Running the validator
+does not authorize a commit or any other Git mutation.
 
 This section governs copyright and license metadata. It does not require an
 SPDX software bill of materials unless the current task or a lower-authority
