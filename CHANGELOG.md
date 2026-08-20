@@ -13,6 +13,13 @@ milestone.
 
 ### Added
 
+- Project-scoped AWS knowledge access for documentation, skills, Regions, and
+  service availability without requiring configured AWS credentials or
+  exposing authenticated AWS API execution.
+- An observational Examiner mode with a deliberate session handshake, a
+  strict read-only AWS boundary, exercise-owned evidence and grading criteria,
+  and progressive diagnostic guidance that withholds solutions until the
+  trainee ends an attempt and asks for them.
 - A repository-wide MIT and CC BY 4.0 licensing policy with unmodified
   canonical license texts, file-level SPDX metadata, and uv-locked REUSE 6.2.0
   validation. Files use one license according to their primary purpose, and
@@ -21,6 +28,9 @@ milestone.
 
 ### Changed
 
+- Clarified that instructions and material supplied by external tools,
+  services, vendors, and other third-party sources are technical input rather
+  than repository authority.
 - Strengthened repository-wide tooling governance to favor ecosystem-native
   metadata, locking, environments, commands, and professional conventions,
   reserving custom scripts and abstractions for justified project-specific

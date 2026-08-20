@@ -24,10 +24,11 @@ training begins. Its planned responsibilities are:
 
 Maintainer governance, its session prompt, the GitHub issue-backed maintenance
 workflow, the changelog and milestone model, and the MIT / CC BY 4.0 licensing
-design are present in the current working tree. The human-readable licensing
-boundary, canonical license texts, repository-wide file-level SPDX metadata,
-and reproducible local REUSE validation are implemented. Examiner and
-Drillmaster governance and session prompts are not yet implemented. No
+design are implemented. Initial Examiner governance and its session prompt are
+also implemented without mode-specific persistent working memory; examination
+context is reconstructed from canonical exercise material, trainee evidence,
+and authorized current observations. Drillmaster governance and its session
+prompt are not yet implemented. No
 infrastructure-as-code tool, shared infrastructure design, lab framework, or
 lab contract is selected yet.
 
@@ -85,6 +86,17 @@ logs, Vim swap files, and uv virtual environments.
 Infrastructure-as-code ignore rules remain deferred until the tool and runtime
 artifact conventions are selected.
 
+The project-scoped Codex configuration exposes AWS knowledge tools without
+requiring configured AWS credentials through `mcp-proxy-for-aws` 1.6.4. It
+uses the conventional exact-version `uvx` invocation with proxy read-only mode
+and an explicit tool allowlist; no authenticated AWS API execution tools are
+exposed, and a separate locked tool project is not justified for this
+non-deterministic remote knowledge dependency. The proxy's `--skip-auth` mode
+may still consult ambient AWS credentials for transport signing when they are
+available. Hard ambient-credential isolation, authenticated Agent Toolkit
+access, and mode-specific AWS profiles remain deferred pending separate design,
+governance, implementation, and validation.
+
 ## Remaining SPDX work
 
 Continuous enforcement remains a future, separately authorized stage:
@@ -113,12 +125,20 @@ does not establish current deployed AWS state. No live AWS evidence is recorded
 for this maintenance phase, and Maintainer performs no AWS mutation or
 deployment.
 
+## Cross-mode authority
+
+The lifetime of otherwise compatible task-specific authority across an
+explicit mode switch remains a shared-governance question tracked by #5.
+Examiner independently prohibits AWS mutation regardless of authority held by
+an earlier mode or task, but that safety boundary does not resolve the broader
+cross-mode authorization model.
+
 ## Undeveloped areas
 
 The live Maintainer issue queue provides the authoritative discrete work and
 priorities. Broader areas not yet developed include:
 
-- Examiner and Drillmaster governance and session prompts
+- Drillmaster governance and session prompts
 - defining standards for AWS scope, credentials, naming, tagging, and cost
 - defining architecture and the boundary between shared and lab infrastructure
 - writing repository, `infra/`, and `labs/` documentation
