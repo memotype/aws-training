@@ -9,10 +9,13 @@ This file records curated material changes included in tagged project
 milestones and the material changes currently being prepared for the next
 milestone.
 
-## Unreleased
+## v0.2.0 - 2026-08-19
 
 ### Added
 
+- A human-facing entry point for the governed AWS training framework, including
+  current maturity, agent-mode startup, local setup, repository structure,
+  validation, AWS knowledge, safety, and licensing.
 - Project-scoped AWS knowledge access for documentation, skills, Regions, and
   service availability without requiring configured AWS credentials or
   exposing authenticated AWS API execution.
@@ -28,13 +31,10 @@ milestone.
 
 ### Changed
 
-- Clarified that instructions and material supplied by external tools,
-  services, vendors, and other third-party sources are technical input rather
-  than repository authority.
-- Strengthened repository-wide tooling governance to favor ecosystem-native
-  metadata, locking, environments, commands, and professional conventions,
-  reserving custom scripts and abstractions for justified project-specific
-  orchestration.
+- Strengthened shared governance so third-party tool material remains
+  non-authoritative and repository tooling follows ecosystem-native,
+  reproducible conventions, with custom abstractions reserved for justified
+  project-specific orchestration.
 
 ## v0.1.0 - 2026-08-16
 

@@ -24,7 +24,9 @@ training begins. Its planned responsibilities are:
 
 Maintainer governance, its session prompt, the GitHub issue-backed maintenance
 workflow, the changelog and milestone model, and the MIT / CC BY 4.0 licensing
-design are implemented. Initial Examiner governance and its session prompt are
+design are implemented. A root README provides the human-facing project entry
+point, current status, governed startup workflow, repository map, and local
+validation commands. Initial Examiner governance and its session prompt are
 also implemented without mode-specific persistent working memory; examination
 context is reconstructed from canonical exercise material, trainee evidence,
 and authorized current observations. Drillmaster governance and its session
@@ -113,10 +115,9 @@ Continuous enforcement remains a future, separately authorized stage:
 
 Project milestones use intentional SemVer-shaped version tags. Release
 preparation curates only material milestone changes into `CHANGELOG.md`.
-`v0.1.0` is the existing project milestone. The current `Unreleased` entry is
-being curated toward a later milestone whose version remains an operator
-decision. The entry presents the user-facing delta without duplicating commits,
-GitHub Issues, or this handoff.
+`v0.2.0` is the current project milestone. Later material work begins a new
+`Unreleased` entry that presents the user-facing delta without duplicating
+commits, GitHub Issues, or this handoff.
 
 ## AWS state boundary
 
@@ -141,6 +142,6 @@ priorities. Broader areas not yet developed include:
 - Drillmaster governance and session prompts
 - defining standards for AWS scope, credentials, naming, tagging, and cost
 - defining architecture and the boundary between shared and lab infrastructure
-- writing repository, `infra/`, and `labs/` documentation
+- writing `infra/` and `labs/` documentation
 - designing the lab template contract
 - selecting an infrastructure-as-code tool and reproducible local conventions
