@@ -26,6 +26,10 @@ milestone.
 - Shared governance now distinguishes local parameters from authority and
   current AWS evidence while requiring credentials and runtime state to remain
   outside repository configuration and history.
+- Maintainer governance now uses dedicated work branches and pull requests as
+  the normal review boundary for material changes, with scoped workflow
+  authorization, lighter handling for minor maintenance, protected-branch
+  compliance, and separate merge and Issue-closure authority.
 
 ## v0.2.0 - 2026-08-19
 

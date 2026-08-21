@@ -38,8 +38,9 @@ already permitted by the active mode. Codex must not demand command-by-command
 approval for those operations.
 
 Workflow-level authorization does not include optional operations, unrelated
-changes or targets, destructive cleanup, publication, or a broader workflow
-than the operator requested. It never overrides a prohibition or mode boundary.
+changes or targets, destructive cleanup, publication not expressly included in
+the authorized governed workflow, or a broader workflow than the operator
+requested. It never overrides a prohibition or mode boundary.
 
 At the beginning of a session, the operator selects the active mode by pasting
 the initialization prompt from that mode's canonical `SESSION.md` file. The
@@ -165,7 +166,58 @@ a remote command is not authority to query other data or mutate remote state.
 Any authorized remote mutation must follow the end-state authorization rule in
 section 2 and remain limited to the requested outcome and targets.
 
-### 5.1) GitHub Issue resolution and closure
+### 5.1) Governed branch-and-pull-request authorization
+
+When an active mode defines a governed branch-and-pull-request workflow, the
+operator may explicitly authorize a scoped task to proceed through that
+workflow to a pull-request handoff. That workflow-level authorization covers
+the necessary and directly implied operations within the task scope. It may
+include:
+
+- verifying the intended repository and canonical base, including fetching or
+  otherwise refreshing the relevant remote refs when needed
+- creating and switching to the dedicated work branch
+- making the authorized working-tree changes
+- staging only the in-scope changes and creating appropriate scoped commits
+- pushing the authorized branch and establishing its upstream when needed
+- creating the corresponding pull request
+- verifying the resulting branch and pull-request state
+- updating that same branch or pull request when directly necessary to
+  complete the authorized implementation before handoff
+
+These operations do not require command-by-command approval after the governed
+workflow and its task scope have been explicitly authorized. A request for
+working-tree implementation alone does not authorize this workflow or any Git
+or GitHub mutation. Configuration, credentials, branch existence, an open
+Issue, repository protection, or technical capability likewise does not grant
+workflow authority. The workflow coordinates its listed working-tree, Git, and
+GitHub operations without collapsing those authority domains or granting AWS
+authority.
+
+Governed branch-and-pull-request authorization does not implicitly authorize:
+
+- merging or closing the pull request, or enabling auto-merge
+- deleting local or remote branches
+- modifying unrelated pull requests
+- modifying or closing any GitHub Issue, or arranging automatic Issue closure
+- creating or moving tags, or creating releases
+- rewriting published history or force-pushing
+- unrelated repository or GitHub mutations
+- AWS inspection or mutation
+
+Each excluded outcome requires its own applicable authority. Post-merge branch
+cleanup is also a separate outcome unless authoritative governance explicitly
+defines otherwise.
+
+GitHub branch protection and rulesets are technical enforcement mechanisms,
+not sources of Codex authority and not substitutes for governance. They may be
+stricter than the governed workflow and must be obeyed. Their presence does not
+grant branch, push, pull-request, merge, bypass, or other authority. If an
+authorized workflow conflicts with active protection, unexpected remote state,
+or a changed canonical base, Codex must stop and report the discrepancy rather
+than circumvent the protection or improvise a broader workflow.
+
+### 5.2) GitHub Issue resolution and closure
 
 Closing an implementation-backed GitHub Issue represents durable resolution in
 the canonical published repository, not completion in a working tree or an
@@ -186,10 +238,13 @@ GitHub that the resolving state is present on the expected canonical branch in
 the expected repository. A matching local commit or a previous push or merge
 attempt is not evidence of publication. Codex must not arrange automatic issue
 closure through a commit or pull request because that would bypass this
-verification step. Until publication and verification occur, a fully
-implemented and validated issue remains open and must be handed off as **ready
-to close after publication**. This handoff does not require a new label or
-custom issue state.
+verification step. Commit and pull-request text must not use automatic-closing
+syntax such as `Closes #N`, `Fixes #N`, or `Resolves #N`. A neutral reference
+such as `Addresses #N` may identify the related work without arranging
+closure. Merging a pull request does not itself authorize Issue closure. Until
+publication and verification occur, a fully implemented and validated issue
+remains open and must be handed off as **ready to close after publication**.
+This handoff does not require a new label or custom issue state.
 
 An issue may close without a repository change when the authorized outcome is
 a non-implementation disposition whose durable resolution is fully represented
@@ -198,7 +253,7 @@ work, or an issue-contained decision. If resolving a decision also requires
 governance, documentation, or other repository changes, the repository-backed
 lifecycle applies.
 
-### 5.2) Version tags and releases
+### 5.3) Version tags and releases
 
 Version tags name intentional project milestones and must use the form
 `vMAJOR.MINOR.PATCH`.
@@ -235,7 +290,7 @@ and remote tags to avoid collision or reuse. Published version tags must not be
 moved or reused as a correction mechanism; a new version should normally be
 created instead.
 
-### 5.3) Changelog
+### 5.4) Changelog
 
 `CHANGELOG.md` is the curated, user-facing record of material project changes.
 It is not a commit log, issue tracker, working-memory handoff, or chronological

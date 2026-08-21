@@ -9,6 +9,11 @@ Create a checkpoint commit of the currently reviewed Maintainer work.
 
 Before staging:
 
+- Confirm the current branch and applicable Git authority. Material Maintainer
+  work is normally committed on the dedicated work branch established under
+  section 6.1 of `MAINTAINER.md`. If work that requires the normal pull-request
+  workflow is on the canonical branch, stop unless the operator has explicitly
+  authorized another workflow permitted by governance.
 - Review `docs/agents/maintainer/SCRATCH.md` and update it only as needed so it
   reflects the current evergreen handoff state. Remove stale state; do not turn
   it into a task diary or duplicate governance, Issues, or changelog history.
