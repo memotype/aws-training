@@ -131,7 +131,7 @@ committing, pushing, opening a pull request, or any unrelated issue mutation.
 Those remain separate outcomes governed by `docs/agents/SHARED.md`.
 
 Maintainer must apply the GitHub Issue resolution and closure lifecycle in
-section 5.1 of `docs/agents/SHARED.md`. When repository work is fully
+section 5.2 of `docs/agents/SHARED.md`. When repository work is fully
 implemented and validated but not yet published, Maintainer must leave the
 issue open, report it as **ready to close after publication**, and identify the
 separately authorized Git and GitHub outcomes still required. This handoff does
@@ -176,10 +176,67 @@ Within the scope of the current task, Maintainer may:
 
 Except for the narrow read-only GitHub discovery in section 4, these permissions
 cover working-tree work only. Git mutations, GitHub mutations, and publication
-remain governed separately by `docs/agents/SHARED.md` and section 5.1.
+remain governed separately by `docs/agents/SHARED.md` and section 5.1 of this
+document.
 
 Repository changes should remain simple, reviewable, deterministic, and
 directly connected to the training range.
+
+### 6.1) Normal branch-and-pull-request workflow
+
+Material Maintainer repository work normally uses a dedicated work branch and
+a pull request as its human-review boundary. This repository's canonical
+branch is currently `main`. Materiality is determined through engineering
+judgment rather than line count or another arbitrary numerical threshold. It
+generally includes new project capabilities, governance changes, tooling or
+dependency changes, infrastructure or lab changes, implementation of a
+substantive GitHub Issue, and coherent multi-file changes that benefit from a
+pull-request review boundary. These examples are illustrative, not exhaustive.
+
+When the operator explicitly authorizes a scoped task to proceed through the
+Maintainer pull-request workflow, section 5.1 of `docs/agents/SHARED.md`
+governs its authority. The normal sequence is:
+
+1. Establish an appropriate current state of the canonical branch.
+2. Create and switch to a dedicated work branch based on that state.
+3. Develop, validate, and commit the authorized changes on the work branch.
+4. Publish the work by pushing that branch.
+5. Propose it to the canonical branch through a pull request.
+
+Before creating a work branch, Maintainer must establish that it is operating
+in the expected repository, identify the intended canonical base, and refresh
+or otherwise verify relevant remote state when needed. It must ensure that the
+base is not unexpectedly divergent, that existing operator working-tree
+changes will not be lost or silently absorbed, and that the proposed work
+branch does not conflict with an existing branch whose ownership or purpose is
+unclear. An absolutely clean working tree is not a universal prerequisite when
+already-reviewed in-scope changes can be preserved safely and deliberately,
+but unrelated operator changes must never be absorbed.
+
+If reconciliation would require a pull, merge, rebase, reset, stash, history
+rewrite, destructive restoration, or another operation outside the authorized
+workflow, Maintainer must stop and report the discrepancy rather than assume
+authority. Issue-backed work should use a concise branch name visibly related
+to the Issue, such as `issue-13-maintainer-pr-workflow`; non-Issue work may use
+a concise descriptive name. No broader branch taxonomy is required.
+
+Trivial or minor maintenance may use an appropriately lighter workflow when
+governance and the current task permit it. Such work may omit unnecessary
+ceremony, including a separate GitHub Issue, and does not include substantive
+changes merely because their diff is small. A lighter workflow does not
+necessarily permit direct publication to `main`: repository protection may
+require a branch and pull request for every remote change. Any direct Git
+workflow still requires explicit authority for its outcomes and must not
+bypass remote protection.
+
+A Maintainer-created pull request should concisely state the resulting change
+or purpose, relevant validation, important limitations or deferred work, and
+the associated Issue when applicable. Issue linkage and closure follow section
+5.2 of `docs/agents/SHARED.md`. After publishing an authorized pull request,
+Maintainer must verify its base, head, state, and expected commit relationship,
+then stop for operator review unless the current task separately authorizes a
+later outcome. Agent self-approval and self-merge are not part of the normal
+workflow.
 
 ## 7) Maintainer actions requiring explicit authorization
 
