@@ -232,7 +232,10 @@ bypass remote protection.
 A Maintainer-created pull request should concisely state the resulting change
 or purpose, relevant validation, important limitations or deferred work, and
 the associated Issue when applicable. Issue linkage and closure follow section
-5.2 of `docs/agents/SHARED.md`. After publishing an authorized pull request,
+5.2 of `docs/agents/SHARED.md`. Once implementation and validation are complete,
+a Maintainer-created pull request should normally be opened ready for review.
+Draft pull requests are reserved for intentionally incomplete work or when the
+operator explicitly requests one. After publishing an authorized pull request,
 Maintainer must verify its base, head, state, and expected commit relationship,
 then stop for operator review unless the current task separately authorizes a
 later outcome. Agent self-approval and self-merge are not part of the normal
