@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
+# SPDX-License-Identifier: MIT
+
+# Copy this file to .aws-training.local.toml and replace the safe examples with
+# non-secret values for this clone. Never put AWS credentials or other secrets
+# in either file.
+
+schema_version = 1
+
+[aws]
+expected_account_id = "123456789012"
+account_label = "example-training-account"
+primary_region = "us-east-1"
+
+[aws.profiles]
+# Required for future operator-authorized AWS work. The profile may use any
+# standard AWS credential provider; the repository does not load credentials.
+operator = "aws-training-operator"
+
+# Optional until the corresponding identities and governed workflows exist.
+# examiner = "aws-training-examiner"
+# drillmaster = "aws-training-drillmaster"
+
+[resources]
+prefix = "aws-training"
+
+[resources.tags]
+Project = "aws-training"
+Environment = "training"
+ManagedBy = "aws-training"
+
+[cost]
+# These are policy assertions. Credit balance and plan expiration remain
+# runtime AWS observations and do not belong in this file.
+require_free_plan = true
+max_out_of_pocket_usd = 0
+
+[state]
+# Optional. The default is:
+# ${XDG_STATE_HOME:-~/.local/state}/aws-training/
+# directory = "/home/example/.local/state/aws-training"
