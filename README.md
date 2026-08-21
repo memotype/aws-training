@@ -24,10 +24,11 @@ deliberate.
 The project is in its governance and structure phase. Practical labs, shared
 AWS infrastructure, and Drillmaster mode are **not implemented yet**.
 
-Maintainer and Examiner modes, local documentation checks, licensing
-validation, and project-scoped AWS knowledge access are in place. The `v0.2.0`
-milestone establishes the current human-facing governed training framework.
-See the [changelog](CHANGELOG.md) for the milestone history.
+Maintainer and Examiner modes, operator-local configuration, local validation,
+licensing checks, and project-scoped AWS knowledge access are in place. The
+`v0.2.0` milestone establishes the current human-facing governed training
+framework. See the [changelog](CHANGELOG.md) for the milestone history and
+current unreleased work.
 
 Repository source and plans describe intended behavior only. They do not prove
 that any AWS infrastructure is deployed or establish the current state of an
@@ -70,6 +71,12 @@ cd aws-training
 npm ci
 ```
 
+For account-specific work, initialize the non-secret local configuration:
+
+```sh
+cp .aws-training.example.toml .aws-training.local.toml
+```
+
 You can use [Codex CLI](https://developers.openai.com/codex/cli) from the
 repository root, or use the
 [Codex IDE integration](https://developers.openai.com/codex/ide) available for
@@ -84,6 +91,8 @@ Before beginning governed work:
 - Install uv 0.12.2 with Python 3.10 or newer. The repository uses uv for
   pinned licensing validation and `uvx` to launch its project-scoped AWS
   knowledge integration.
+- Use Python 3.11 or newer for the standard-library operator-configuration
+  reader and its tests.
 - Configure AWS credentials only when an exercise and active mode explicitly
   require authorized AWS access. Credentials are not a routine repository
   prerequisite.
@@ -94,16 +103,43 @@ Before beginning governed work:
 | --- | --- |
 | `CODEX.md` | Root authority, training purpose, and AWS safety boundaries. |
 | `docs/agents/` | Shared and mode-specific governance and session prompts. |
+| `.aws-training.example.toml` | Safe tracked template for per-clone operator parameters. |
+| `docs/standards/` | Canonical repository configuration and operational standards. |
 | `.codex/config.toml` | Project-scoped AWS knowledge integration for Codex. |
+| `tools/aws_training_config.py` | Shared offline TOML reader and validator. |
 | `tools/reuse/` | Pinned REUSE licensing-validation environment. |
 | `package.json` | Markdown validation dependencies. |
 | `CHANGELOG.md` | Curated changes for tagged and upcoming milestones. |
 | `LICENSE.md` and `LICENSES/` | Licensing policy and canonical license texts. |
 
 Governance reserves `infra/` for shared training-range infrastructure, `labs/`
-for trainee exercises, and `docs/architecture/` and `docs/standards/` for
-supporting design material. These areas do not yet contain tracked
-implementations.
+for trainee exercises, and `docs/architecture/` for architecture material.
+Those areas do not yet contain tracked implementations; `docs/standards/`
+contains the operator-configuration contract.
+
+## Local Configuration and Runtime State
+
+The tracked `.aws-training.example.toml` documents safe placeholders. Its
+gitignored copy, `.aws-training.local.toml`, is a schema-versioned interface for
+non-secret account IDs, Regions, AWS CLI profile names, resource conventions,
+and an explicit bounded cost policy for one clone. It must never contain
+credentials.
+
+AWS profiles remain managed through standard mechanisms outside the repository,
+regardless of whether they use AWS login, STS, role assumption,
+`credential_process`, or another provider. Configuration supplies parameters,
+not permission to use them.
+
+Runtime and audit state resolves outside the repository under
+`${XDG_STATE_HOME:-~/.local/state}/aws-training/` by default. The planned
+append-only `operations.jsonl` lets future mutation-capable Codex workflows
+record their authorized out-of-band changes and restoration verification
+without replacing infrastructure-as-code state or human audit history.
+
+See the
+[operator-configuration standard](docs/standards/OPERATOR_CONFIGURATION.md)
+for the field contract, offline validator, state override, account and Region
+safety assertions, and versioned ledger event model.
 
 ## Tooling and AWS Knowledge
 
@@ -117,6 +153,14 @@ Run the pinned REUSE licensing check with uv:
 
 ```sh
 uv run --project tools/reuse --locked --isolated reuse --root . lint
+```
+
+Validate the tracked example without creating local configuration or runtime
+state:
+
+```sh
+python3 tools/aws_training_config.py \
+  --config .aws-training.example.toml
 ```
 
 The project-scoped [Codex configuration](.codex/config.toml) provides AWS

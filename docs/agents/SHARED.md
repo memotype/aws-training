@@ -293,10 +293,10 @@ later `Unreleased` entry. Finalizing a release must not add an empty replacement
 AWS access is permitted only as defined by the active mode and current task.
 Possession of working credentials is not authorization.
 
-Before an authorized AWS operation, Codex must perform the identity, account,
-Region, and training-scope checks required by `CODEX.md`, the active mode, and
-the current exercise. AWS queries and mutations must use the minimum permissions
-and target set needed for the task.
+An authorized AWS workflow must complete the identity, account, Region, and
+training-scope preflight required by `CODEX.md`, the active mode, and the current
+exercise before proceeding to subsequent AWS operations. AWS queries and
+mutations must use the minimum permissions and target set needed for the task.
 
 Codex must classify commands by their actual or potential side effects, not by
 labels such as "read-only," "plan," "check," or "validation." A command that
@@ -307,6 +307,38 @@ external mutation and requires authority for that effect.
 Unexpected resources, state differences, permissions, failures, or charges
 must be reported. Codex must not conceal them or expand scope in an attempt to
 work around them.
+
+### 6.1) Operator-local configuration and runtime state
+
+Account-specific repository work must use `.aws-training.local.toml` when its
+parameters are applicable and follow the canonical semantics in the
+[operator-configuration standard](../standards/OPERATOR_CONFIGURATION.md).
+The file is non-secret local input. Its presence and any configured account,
+Region, profile, identity, resource name, tag, cost policy, or state path supply
+parameters only; they do not grant authority or establish current AWS state.
+
+AWS credential material must remain in standard external AWS credential
+providers and must not be copied into repository configuration. Codex and
+repository tooling must refer to authentication through configured AWS CLI
+profile names rather than inspect credential files directly.
+
+Configured expected account and Region values are safety assertions. An AWS
+workflow must already be authorized by the active governance and current task
+before any query occurs. Required caller-identity, account, plan, and scope
+observations may be the first queries of that authorized workflow. Preflight
+determines whether later authorized operations may proceed; failure, inability
+to verify, or mismatch must stop the workflow, while success does not broaden
+its authority.
+
+Regional calls must explicitly select `aws.primary_region` or another Region
+permitted by the active exercise instead of relying silently on an ambient
+default. Every configured range must have an explicit bounded cost policy. A
+cost limit constrains authorized work rather than authorizing spending, no
+workflow may assume unrestricted spending, and finite AWS credits do not
+authorize arbitrary consumption.
+
+Runtime and audit state must resolve outside the Git working tree and must not
+be committed.
 
 ## 7) Infrastructure-as-code and generated artifacts
 

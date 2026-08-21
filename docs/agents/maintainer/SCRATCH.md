@@ -26,8 +26,11 @@ Maintainer governance, its session prompt, the GitHub issue-backed maintenance
 workflow, the changelog and milestone model, and the MIT / CC BY 4.0 licensing
 design are implemented. A root README provides the human-facing project entry
 point, current status, governed startup workflow, repository map, and local
-validation commands. Initial Examiner governance and its session prompt are
-also implemented without mode-specific persistent working memory; examination
+validation commands. A tracked safe example, gitignored per-clone TOML file,
+shared offline Python reader, and external XDG runtime-state contract provide
+non-secret operator-local parameters without coupling the public repository to
+one AWS account. Initial Examiner governance and its session prompt are also
+implemented without mode-specific persistent working memory; examination
 context is reconstructed from canonical exercise material, trainee evidence,
 and authorized current observations. Drillmaster governance and its session
 prompt are not yet implemented. No
@@ -96,8 +99,33 @@ exposed, and a separate locked tool project is not justified for this
 non-deterministic remote knowledge dependency. The proxy's `--skip-auth` mode
 may still consult ambient AWS credentials for transport signing when they are
 available. Hard ambient-credential isolation, authenticated Agent Toolkit
-access, and mode-specific AWS profiles remain deferred pending separate design,
-governance, implementation, and validation.
+access, and provisioned mode-specific AWS identities remain deferred pending
+separate design, governance, implementation, and validation.
+
+## Operator-local configuration and state
+
+`.aws-training.example.toml` defines the tracked, non-secret configuration
+shape, while `.aws-training.local.toml` is the explicitly ignored per-clone
+file. AWS CLI profile names abstract external credential providers; the
+operator profile is required, Examiner and Drillmaster profiles remain
+optional, and Maintainer has no AWS profile. The Python 3.11 standard-library
+reader in `tools/aws_training_config.py` requires TOML contract version 1 and
+validates and normalizes the shared contract without contacting AWS or loading
+credentials. Each clone declares a bounded cost policy; the safe example
+requires the Free plan and zero out-of-pocket cost, while the public contract
+also supports non-Free-plan accounts with a finite non-negative ceiling.
+
+Expected account and primary Region values are future preflight safety
+assertions, not current observations or authority. In an already-authorized AWS
+workflow, caller identity is an initial preflight query and regional calls must
+select the configured or exercise-permitted Region explicitly. Runtime state
+defaults to the external XDG state location and may be overridden only to
+another path outside the Git working tree. The version 1 append-only
+`operations.jsonl` contract is only for future mutation-capable Codex workflows
+to record per-resource operation events and later `restoration_verified` events
+that reference the originals; it does not require human-authored entries. No
+writer, AWS preflight, mutation workflow, or external runtime directory exists
+yet.
 
 ## Remaining SPDX work
 
@@ -140,7 +168,8 @@ The live Maintainer issue queue provides the authoritative discrete work and
 priorities. Broader areas not yet developed include:
 
 - Drillmaster governance and session prompts
-- defining standards for AWS scope, credentials, naming, tagging, and cost
+- defining full AWS scope, identity provisioning, naming, tagging, and cost
+  enforcement standards beyond the local parameter contract
 - defining architecture and the boundary between shared and lab infrastructure
 - writing `infra/` and `labs/` documentation
 - designing the lab template contract

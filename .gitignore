@@ -3,6 +3,7 @@
 
 *.swp
 *.swo
+.aws-training.local.toml
 .vscode
 .editorconfig
 .venv/

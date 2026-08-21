@@ -9,6 +9,24 @@ This file records curated material changes included in tagged project
 milestones and the material changes currently being prepared for the next
 milestone.
 
+## Unreleased
+
+### Added
+
+- A versioned, gitignored, non-secret operator-configuration contract with safe
+  tracked examples, named AWS profile separation, account and Region safety
+  assertions, explicit bounded cost policy, and a shared standard-library
+  reader and validator.
+- External XDG runtime-state conventions and a minimal versioned, append-only
+  operations and cleanup ledger contract for future authorized Codex mutations
+  and restoration-verification workflows.
+
+### Changed
+
+- Shared governance now distinguishes local parameters from authority and
+  current AWS evidence while requiring credentials and runtime state to remain
+  outside repository configuration and history.
+
 ## v0.2.0 - 2026-08-19
 
 ### Added
