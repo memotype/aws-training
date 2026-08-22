@@ -21,7 +21,8 @@ deliberate.
 
 ## Current Status
 
-The project is in its governance and structure phase. Practical labs and
+The project is in its initial infrastructure implementation phase.
+Practical labs and
 Drillmaster mode are **not implemented yet**. Repository source includes the
 first shared infrastructure component, but no AWS deployment is established.
 
