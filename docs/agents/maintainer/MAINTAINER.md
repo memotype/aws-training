@@ -60,38 +60,52 @@ must perform these discovery steps in order:
    the authenticated `gh` CLI to verify that it is the expected repository.
 2. Query the open GitHub Issues carrying the `maintainer` label in that
    repository.
-   - If the query succeeds, include counts for each priority and for
-     unprioritized issues in the confirmation message.
+   - If the query succeeds, identify each Issue by number, title, and priority,
+     and include counts for each priority and for unprioritized issues in the
+     confirmation message.
    - If the query cannot be completed, check
      `https://www.githubstatus.com/` for a reported GitHub Issues outage,
      summarize the reported status, and continue under the degraded-discovery
      procedure below. Do not treat the status page as evidence of the current
      issue queue.
 3. Read `docs/agents/maintainer/SCRATCH.md`.
+4. Inspect the current branch, `HEAD` attachment, index, and working tree
+   without changing them.
 
 The repository check must compare the repository returned by GitHub with the
 configured checkout remote and the available operator context before returned
 issue state is treated as authoritative. The narrow discovery authority in
-this section covers only the read-only `gh` repository and issue queries needed
-to identify the expected repository and inspect its Maintainer issue queue. If
-the issue query cannot be completed, it also covers one read-only request to
+this section covers only the read-only local Git inspection and `gh` repository
+and issue queries needed to identify the expected repository, inspect its
+Maintainer issue queue, and report checkout state. If the issue query cannot be
+completed, it also covers one read-only request to
 `https://www.githubstatus.com/`. It does not authorize other remote discovery,
-general network activity, or any GitHub mutation.
+general network activity, working-tree edits, Git mutations, or any GitHub
+mutation.
 
 If authentication, network access, or repository resolution prevents the
 query, Codex must enter a degraded discovery state and report, before
 acknowledging Maintainer mode, that the current durable issue queue could not be
-established. Codex may still initialize Maintainer mode and await the operator's
-task, but it must not claim knowledge of the current queue or substitute
-`SCRATCH.md`, remembered issue state, or a prior query for current GitHub state.
+established. Codex may still initialize Maintainer mode, but it must not claim
+knowledge of the current queue or substitute `SCRATCH.md`, remembered issue
+state, or a prior query for current GitHub state.
 
 Codex must either inspect the current queue successfully or disclose the
 degraded discovery state, and it must read `SCRATCH.md`, before acknowledging
-that Maintainer mode is active and awaiting the operator's
-repository-maintenance task. Successfully returned issue state and
-`SCRATCH.md` provide working context but do not select a mode, grant authority,
-or override governance. If either conflicts with a governing document, the
-governing document controls.
+that Maintainer mode is active. The initialization report must identify the
+expected repository and canonical default branch, summarize the current branch,
+index, and working-tree state, and include the required issue counts or degraded
+discovery disclosure. Successfully returned issue state and `SCRATCH.md`
+provide working context but do not select a mode, grant authority, or override
+governance. If either conflicts with a governing document, the governing
+document controls.
+
+Initialization is an orientation boundary, not the beginning of a maintenance
+unit. After reporting, Codex must stop and ask whether the operator wants to
+continue a specific existing Maintainer Issue or start a new unit of work. It
+must not select, create, label, edit, or comment on an Issue; create or switch a
+branch; or edit repository content during initialization. A fresh session does
+not imply a fresh Issue, branch, or task.
 
 Before non-trivial repository work, Codex must also inspect the specifications,
 files, and local repository state relevant to the requested outcome.
@@ -104,13 +118,28 @@ Maintainer uses GitHub Issues and `SCRATCH.md` for different kinds of
 cross-session state. Both are subordinate to `CODEX.md`,
 `docs/agents/SHARED.md`, this document, and the current task.
 
-### 5.1) Durable issue register
+### 5.1) Durable work units and issue handoff
 
 GitHub Issues in the expected repository carrying the `maintainer` label are
 the authoritative durable register of discrete repository-maintenance defects,
 risks, ambiguities, design decisions, and deferred work. GitHub's issue number
 is the canonical identifier, open or closed state represents lifecycle, and
 comments and issue history record discussion and progress.
+
+A substantive Maintainer task is one durable unit of work represented by one
+open Maintainer Issue and one dedicated Issue work branch. Maintainer sessions
+are ephemeral execution contexts for that unit: a unit may span many sessions,
+and starting a fresh session neither replaces the Issue nor creates another
+one. Before new substantive implementation begins, the operator must choose an
+existing Issue to continue or identify the requested outcome as a new unit so
+the governed setup in section 6.1 can create its Issue.
+
+Substantive work includes new project capabilities, governance changes,
+tooling or dependency changes, infrastructure or lab changes, durable design
+decisions, and coherent multi-file changes that warrant their own review and
+history. Materiality follows engineering judgment, not line count. A tiny diff
+may be substantive, while a truly incidental correction need not become a
+durable unit merely for ceremony.
 
 The Maintainer label model is intentionally small:
 
@@ -126,9 +155,19 @@ explicit governed workflow, with no command-by-command approval required for
 necessary operations within that scope. Implementing repository work described
 by an issue does not by itself authorize changing the issue or its state.
 
-Discovering or working on an issue does not authorize branching, staging,
-committing, pushing, opening a pull request, or any unrelated issue mutation.
-Those remain separate outcomes governed by `docs/agents/SHARED.md`.
+Issue comments may provide concise durable handoff state for a work unit when
+the current task authorizes that mutation. Appropriate comment content includes
+material decisions, findings, blockers, validation state, completed milestones,
+remaining work, and relevant branch or commit identity. Comments must not
+become command transcripts, reasoning diaries, session logs, or duplicates of
+governance, Git or pull-request history, `CHANGELOG.md`, or repository-wide
+evergreen context in `SCRATCH.md`. Stale conclusions should be corrected in a
+later concise comment rather than silently treated as current.
+
+Discovering or working on an Issue does not by itself authorize commenting,
+branching, staging, committing, pushing, opening a pull request, or any
+unrelated Issue mutation. Those remain separate outcomes except where the
+operator invokes the bounded setup or publication workflows in section 6.
 
 Maintainer must apply the GitHub Issue resolution and closure lifecycle in
 section 5.2 of `docs/agents/SHARED.md`. When repository work is fully
@@ -139,9 +178,9 @@ not create a label or custom issue state.
 
 ### 5.2) Maintainer working memory
 
-`docs/agents/maintainer/SCRATCH.md` is Maintainer's freeform working-memory and
-handoff file. It describes the state of ongoing repository development for a
-future Maintainer session. It may record:
+`docs/agents/maintainer/SCRATCH.md` is Maintainer's freeform, repository-wide
+working-memory and handoff file. It describes evergreen repository-development
+context for a future Maintainer session. It may record:
 
 - current repository-development state relevant to planned work
 - decisions and completed work that affect future maintenance
@@ -153,12 +192,12 @@ state of work as it now stands rather than accumulate a chronological diary of
 session activity. When facts, decisions, or plans change, stale statements
 should be revised or removed instead of being preserved merely as history.
 
-`SCRATCH.md` must not duplicate the issue queue or be treated as evidence of
-current GitHub state. Maintainer should update it when the current task permits
-the edit and its work materially changes the planned work or context needed by
-a future Maintainer session. It should not duplicate canonical policy except
-for concise context needed to understand current work, and it may not be used
-as evidence of deployed AWS state.
+`SCRATCH.md` must not duplicate the issue queue, replace Issue-specific handoff
+comments, or be treated as evidence of current GitHub state. Maintainer should
+update it when the current task permits the edit and its work materially changes
+repository-wide plans or context needed across work units. It should not
+duplicate canonical policy except for concise context needed to understand
+current work, and it may not be used as evidence of deployed AWS state.
 
 ## 6) Permitted repository work
 
@@ -182,64 +221,133 @@ document.
 Repository changes should remain simple, reviewable, deterministic, and
 directly connected to the training range.
 
-### 6.1) Normal branch-and-pull-request workflow
+### 6.1) Issue-backed working-tree workflow
 
-Material Maintainer repository work normally uses a dedicated work branch and
-a pull request as its human-review boundary. This repository's canonical
-branch is currently `main`. Materiality is determined through engineering
-judgment rather than line count or another arbitrary numerical threshold. It
-generally includes new project capabilities, governance changes, tooling or
-dependency changes, infrastructure or lab changes, implementation of a
-substantive GitHub Issue, and coherent multi-file changes that benefit from a
-pull-request review boundary. These examples are illustrative, not exhaustive.
+Substantive Maintainer work must be established on its dedicated Issue work
+branch before new implementation begins. Normal substantive work must not be
+performed or committed directly on the canonical default branch. The branch is
+durable for the Issue rather than for one session and must be resumed across
+sessions instead of replaced with a session-specific branch.
 
-When the operator explicitly authorizes a scoped task to proceed through the
-Maintainer pull-request workflow, section 5.1 of `docs/agents/SHARED.md`
-governs its authority. The normal sequence is:
+After initialization, an operator instruction to start a specified new
+substantive Maintainer unit invokes this bounded setup workflow, including the
+read-only repository and Issue discovery and relevant remote-ref refresh needed
+for its safety checks. For new work, it authorizes creating exactly one
+meaningful GitHub Issue, applying the appropriate existing `maintainer` and
+priority labels, and creating and switching to exactly one dedicated Issue
+branch. An instruction to continue a specified existing Issue authorizes the
+branch creation or switch directly necessary to establish or resume that
+Issue's one work branch. These setup operations require no command-by-command
+approval, but they do not authorize editing or commenting on an existing Issue,
+creating labels, working-tree changes beyond the requested task, staging,
+committing, pushing, opening or changing a pull request, merging, Issue closure,
+or branch cleanup.
 
-1. Establish an appropriate current state of the canonical branch.
-2. Create and switch to a dedicated work branch based on that state.
-3. Develop, validate, and commit the authorized changes on the work branch.
-4. Publish the work by pushing that branch.
-5. Propose it to the canonical branch through a pull request.
+The setup sequence is:
 
-Before creating a work branch, Maintainer must establish that it is operating
-in the expected repository, identify the intended canonical base, and refresh
-or otherwise verify relevant remote state when needed. It must ensure that the
-base is not unexpectedly divergent, that existing operator working-tree
-changes will not be lost or silently absorbed, and that the proposed work
-branch does not conflict with an existing branch whose ownership or purpose is
-unclear. An absolutely clean working tree is not a universal prerequisite when
-already-reviewed in-scope changes can be preserved safely and deliberately,
-but unrelated operator changes must never be absorbed.
+1. Resolve and verify the expected GitHub repository, configured matching
+   remote, and current canonical default branch.
+2. For existing work, verify the open `maintainer` Issue, read its body and
+   relevant durable handoff comments, and confirm that the task continues its
+   scope. For new work, create the Issue and apply appropriate existing labels
+   before implementation.
+3. Derive the branch name as `issue-<number>-<concise-slug>`, using the Issue
+   number and a short stable description. One Issue uses one work branch.
+4. Inspect `HEAD`, the current branch, index, working tree, local and applicable
+   remote Issue-branch refs, and the relationship between the intended base and
+   current canonical branch.
+5. Create or resume the Issue branch from a safe canonical starting point, then
+   verify the expected branch, base relationship, index, and working tree before
+   implementation begins or resumes.
 
-If reconciliation would require a pull, merge, rebase, reset, stash, history
-rewrite, destructive restoration, or another operation outside the authorized
-workflow, Maintainer must stop and report the discrepancy rather than assume
-authority. Issue-backed work should use a concise branch name visibly related
-to the Issue, such as `issue-13-maintainer-pr-workflow`; non-Issue work may use
-a concise descriptive name. No broader branch taxonomy is required.
+For new work, the canonical checkout must contain no unrelated or already
+in-flight work that could be absorbed into the new Issue branch. For existing
+work, Maintainer must preserve all in-scope state and must not silently absorb
+unrelated operator changes. If the Issue branch exists locally or remotely,
+Maintainer must verify and resume it rather than create a competing branch. If
+local and remote Issue-branch state diverges, the canonical base changed
+unexpectedly, or reconciliation would require a pull, merge, rebase, reset,
+stash, force operation, destructive restoration, or history rewrite, stop and
+report the discrepancy.
 
-Trivial or minor maintenance may use an appropriately lighter workflow when
-governance and the current task permit it. Such work may omit unnecessary
-ceremony, including a separate GitHub Issue, and does not include substantive
-changes merely because their diff is small. A lighter workflow does not
-necessarily permit direct publication to `main`: repository protection may
-require a branch and pull request for every remote change. Any direct Git
-workflow still requires explicit authority for its outcomes and must not
-bypass remote protection.
+An in-flight substantive change found on the canonical default branch is a
+workflow violation, not permission to move it automatically. Maintainer must
+stop unless the operator explicitly authorizes a bounded recovery onto the
+Issue branch. Such recovery must inventory and fingerprint the working tree and
+index before the transition, preserve them without stashing or rewriting, and
+verify the same state afterward before work continues.
 
-A Maintainer-created pull request should concisely state the resulting change
-or purpose, relevant validation, important limitations or deferred work, and
-the associated Issue when applicable. Issue linkage and closure follow section
-5.2 of `docs/agents/SHARED.md`. Once implementation and validation are complete,
-a Maintainer-created pull request should normally be opened ready for review.
-Draft pull requests are reserved for intentionally incomplete work or when the
-operator explicitly requests one. After publishing an authorized pull request,
-Maintainer must verify its base, head, state, and expected commit relationship,
-then stop for operator review unless the current task separately authorizes a
-later outcome. Agent self-approval and self-merge are not part of the normal
-workflow.
+A truly incidental, non-substantive correction may omit an Issue only when the
+operator selects an explicitly lighter workflow. That exception must not be
+used to avoid the Issue lifecycle for a small but substantive change, does not
+authorize a normal checkpoint through `COMMIT.md`, and does not imply direct
+publication to the canonical branch.
+
+### 6.2) Checkpoint commits
+
+A checkpoint commit is a separately authorized outcome. Before staging,
+Maintainer must verify that the specified open Maintainer Issue, current work
+branch, and intended cumulative changes belong to the same work unit. `HEAD`
+must be attached to the exact dedicated Issue branch, and that branch must not
+be the canonical default branch. Failure of this invariant stops the commit;
+commit authorization does not normally create, choose, or switch branches.
+
+The operational `COMMIT.md` prompt invokes this governed checkpoint procedure.
+It may require tending current handoff and changelog content, reviewing the
+complete cumulative diff, and running required validation before staging only
+in-scope changes. It does not authorize Issue comments, publication, or any
+later lifecycle outcome.
+
+### 6.3) Pull-request publication
+
+Publication and pull-request creation are separately authorized from Issue
+setup, working-tree implementation, and checkpoint commits. When the operator
+explicitly authorizes the scoped Maintainer pull-request workflow, section 5.1
+of `docs/agents/SHARED.md` governs the directly implied Git and GitHub
+operations. The pull request must use the Issue branch as its head and the
+canonical default branch as its base.
+
+A Maintainer-created pull request should concisely state the resulting change,
+relevant validation, important limitations or deferred work, and the associated
+Issue using neutral linkage that does not arrange automatic closure. Once
+implementation and validation are complete, it should normally be opened ready
+for review. Draft pull requests are reserved for intentionally incomplete work
+or explicit operator direction. Maintainer must verify the pull request's base,
+head, state, and expected commit relationship, then stop for operator review
+unless a later outcome is separately authorized. Agent self-approval,
+self-merge, Issue closure, and branch cleanup are not part of publication.
+
+### 6.4) Completion and post-merge cleanup
+
+Merge, Issue closure, and post-merge cleanup are separate outcomes. Issue
+closure follows section 5.2 of `docs/agents/SHARED.md` and requires immediate
+verification that the resolving state is present on the canonical branch.
+Cleanup must not begin until GitHub reports the pull request as merged, the
+related Issue is closed as completed, and the merged state is present on the
+current canonical default branch.
+
+The operational `POST_MERGE.md` prompt may separately authorize cleanup for one
+exact repository, pull request, Issue, and Issue branch. Cleanup must resolve a
+unique matching remote, require a clean index and working tree, and begin on the
+named Issue branch. This cleanup procedure supports only the repository's
+merge-commit workflow; squash- or rebase-merged work requires a different
+explicitly governed procedure.
+
+Before deletion, Maintainer must refresh the relevant refs and prove that the
+local Issue-branch tip is an ancestor of the canonical remote default branch.
+If the remote Issue branch exists, it must independently prove the same for the
+remote tip. After switching to the default branch and updating it by
+fast-forward only, Maintainer must repeat every applicable ancestry proof while
+the feature refs still exist. Git's normal safe local deletion is an additional
+check, not a substitute for explicit canonical containment evidence.
+
+Only after every check succeeds may Maintainer delete the local Issue branch
+with safe deletion and, if still present and unchanged, delete that exact remote
+Issue branch. It must then verify the final default-branch synchronization,
+clean checkout, and absence of both feature refs. Any unexpected state,
+unpublished work, changed ref, failed ancestry proof, or need for merge, rebase,
+reset, stash, force, broad pruning, or destructive restoration stops cleanup
+without deletion or reconciliation.
 
 ## 7) Maintainer actions requiring explicit authorization
 

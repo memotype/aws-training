@@ -7,9 +7,9 @@ SPDX-License-Identifier: CC-BY-4.0
 
 This file is Maintainer's working memory for repository-development handoffs.
 It supplies current context and plans but does not select a mode, grant
-authority, or override governance. A fresh session reads it after the canonical
-governance documents and the required Maintainer GitHub issue discovery
-attempt, then acknowledges Maintainer mode and waits for the operator's task.
+authority, or override governance. A fresh session reads it during the governed
+read-only Maintainer orientation, reports repository and Issue-queue state, and
+then asks the operator to continue an existing Issue or start a new work unit.
 
 ## Current phase
 
@@ -22,31 +22,35 @@ training begins. Its planned responsibilities are:
   `docs/`
 - small repository-maintenance and validation utilities under `tools/`
 
-Maintainer governance, its session prompt, the GitHub issue-backed maintenance
-workflow, the changelog and milestone model, and the MIT / CC BY 4.0 licensing
-design are implemented. A root README provides the human-facing project entry
-point, current status, governed startup workflow, repository map, and local
-validation commands. A tracked safe example, gitignored per-clone TOML file,
-shared offline Python reader, and external XDG runtime-state contract provide
-non-secret operator-local parameters without coupling the public repository to
-one AWS account. Initial Examiner governance and its session prompt are also
-implemented without mode-specific persistent working memory; examination
-context is reconstructed from canonical exercise material, trainee evidence,
-and authorized current observations. Drillmaster governance and its session
-prompt are not yet implemented. No
+Maintainer governance, its operational prompts, the GitHub Issue-backed work
+lifecycle, the changelog and milestone model, and the MIT / CC BY 4.0 licensing
+design are implemented. Substantive Maintainer work uses one durable Issue and
+dedicated branch across ephemeral sessions; checkpoint, publication, closure,
+and post-merge cleanup remain separately authorized phases. A root README
+provides the human-facing project entry point, current status, governed startup
+workflow, repository map, and local validation commands. A tracked safe
+example, gitignored per-clone TOML file, shared offline Python reader, and
+external XDG runtime-state contract provide non-secret operator-local
+parameters without coupling the public repository to one AWS account. Initial
+Examiner governance and its session prompt are also implemented without
+mode-specific persistent working memory; examination context is reconstructed
+from canonical exercise material, trainee evidence, and authorized current
+observations. Drillmaster governance and its session prompt are not yet
+implemented. No
 infrastructure-as-code tool, shared infrastructure design, lab framework, or
 lab contract is selected yet.
 
 ## Handoff boundary
 
 GitHub Issues carrying the `maintainer` label are the durable source for
-discrete work, decisions, priority, and lifecycle. A fresh query establishes
-their current state. This file retains only broader context needed across
-Maintainer sessions and must not be treated as a snapshot of the issue queue.
+discrete work, decisions, priority, lifecycle, and concise work-unit handoff.
+A fresh query establishes their current state. This file retains only broader
+context needed across work units and must not be treated as a snapshot of the
+issue queue or a replacement for Issue-specific handoff.
 
-The Maintainer session continues to use the deliberate initialization
-handshake: complete discovery, acknowledge the mode, and wait for a separate
-operator task.
+The Maintainer session uses a read-only initialization handshake: complete
+discovery, acknowledge the mode, report orientation state, and stop for the
+operator to select an existing Issue or a new work unit.
 
 ## Repository tooling
 
