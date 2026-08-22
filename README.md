@@ -21,11 +21,13 @@ deliberate.
 
 ## Current Status
 
-The project is in its governance and structure phase. Practical labs, shared
-AWS infrastructure, and Drillmaster mode are **not implemented yet**.
+The project is in its governance and structure phase. Practical labs and
+Drillmaster mode are **not implemented yet**. Repository source includes the
+first shared infrastructure component, but no AWS deployment is established.
 
 Maintainer and Examiner modes, operator-local configuration, local validation,
-licensing checks, and project-scoped AWS knowledge access are in place. The
+licensing checks, project-scoped AWS knowledge access, and native
+CloudFormation source for a persistent Lambda artifact store are in place. The
 `v0.2.0` milestone establishes the current human-facing governed training
 framework. See the [changelog](CHANGELOG.md) for the milestone history and
 current unreleased work.
@@ -95,8 +97,8 @@ Before beginning governed work:
 - Use an authenticated GitHub CLI (`gh`) for Maintainer initialization, which
   verifies the repository and reads the live Maintainer issue queue.
 - Install uv 0.12.2 with Python 3.10 or newer. The repository uses uv for
-  pinned licensing validation and `uvx` to launch its project-scoped AWS
-  knowledge integration.
+  pinned licensing and CloudFormation validation and `uvx` to launch its
+  project-scoped AWS knowledge integration.
 - Use Python 3.11 or newer for the standard-library operator-configuration
   reader and its tests.
 - Configure AWS credentials only when an exercise and active mode explicitly
@@ -111,17 +113,20 @@ Before beginning governed work:
 | `docs/agents/` | Shared and mode-specific governance and session prompts. |
 | `.aws-training.example.toml` | Safe tracked template for per-clone operator parameters. |
 | `docs/standards/` | Canonical repository configuration and operational standards. |
+| `infra/artifact-store/` | Native CloudFormation source for the shared Lambda artifact bucket. |
 | `.codex/config.toml` | Project-scoped AWS knowledge integration for Codex. |
 | `tools/aws_training_config.py` | Shared offline TOML reader and validator. |
+| `tools/cloudformation/` | Pinned CloudFormation linting environment. |
 | `tools/reuse/` | Pinned REUSE licensing-validation environment. |
 | `package.json` | Markdown validation dependencies. |
 | `CHANGELOG.md` | Curated changes for tagged and upcoming milestones. |
 | `LICENSE.md` and `LICENSES/` | Licensing policy and canonical license texts. |
 
 Governance reserves `infra/` for shared training-range infrastructure, `labs/`
-for trainee exercises, and `docs/architecture/` for architecture material.
-Those areas do not yet contain tracked implementations; `docs/standards/`
-contains the operator-configuration contract.
+for trainee exercises, and `docs/architecture/` for architecture material. The
+artifact-store template is the first tracked shared-infrastructure source;
+`labs/` and `docs/architecture/` do not yet contain tracked implementations.
+The `docs/standards/` directory contains the operator-configuration contract.
 
 ## Local Configuration and Runtime State
 
@@ -159,6 +164,13 @@ Run the pinned REUSE licensing check with uv:
 
 ```sh
 uv run --project tools/reuse --locked --isolated reuse --root . lint
+```
+
+Run the pinned CloudFormation check against the artifact-store template:
+
+```sh
+uv run --project tools/cloudformation --locked --isolated \
+  cfn-lint infra/artifact-store/template.yaml
 ```
 
 Validate the tracked example without creating local configuration or runtime
