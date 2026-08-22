@@ -13,6 +13,10 @@ milestone.
 
 ### Added
 
+- Native CloudFormation source for a persistent, private, versioned, SSE-S3
+  Lambda artifact bucket with bounded noncurrent-version and incomplete-upload
+  retention, explicit retained-resource behavior, and reproducible uv-locked
+  `cfn-lint` validation.
 - A reusable Maintainer post-merge cleanup prompt with canonical-publication,
   branch-containment, clean-checkout, safe deletion, and final-state checks.
 - A versioned, gitignored, non-secret operator-configuration contract with safe

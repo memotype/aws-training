@@ -1,0 +1,66 @@
+# SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
+# SPDX-License-Identifier: MIT
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Persistent S3 artifact store for packaged Python Lambda code.
+
+Parameters:
+  ProjectTagValue:
+    Type: String
+    Default: aws-training
+    Description: Value for the standard Project resource tag.
+    MinLength: 1
+    MaxLength: 256
+  EnvironmentTagValue:
+    Type: String
+    Default: training
+    Description: Value for the standard Environment resource tag.
+    MinLength: 1
+    MaxLength: 256
+  ManagedByTagValue:
+    Type: String
+    Default: aws-training
+    Description: Value for the standard ManagedBy resource tag.
+    MinLength: 1
+    MaxLength: 256
+
+Resources:
+  ArtifactBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: RetainExceptOnCreate
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireNoncurrentArtifacts
+            Status: Enabled
+            NoncurrentVersionExpiration:
+              NoncurrentDays: 14
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTagValue
+        - Key: Environment
+          Value: !Ref EnvironmentTagValue
+        - Key: ManagedBy
+          Value: !Ref ManagedByTagValue
+      VersioningConfiguration:
+        Status: Enabled
+
+Outputs:
+  ArtifactBucketName:
+    Description: Name of the persistent S3 artifact bucket.
+    Value: !Ref ArtifactBucket

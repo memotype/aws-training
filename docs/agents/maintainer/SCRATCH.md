@@ -35,10 +35,12 @@ parameters without coupling the public repository to one AWS account. Initial
 Examiner governance and its session prompt are also implemented without
 mode-specific persistent working memory; examination context is reconstructed
 from canonical exercise material, trainee evidence, and authorized current
-observations. Drillmaster governance and its session prompt are not yet
-implemented. No
-infrastructure-as-code tool, shared infrastructure design, lab framework, or
-lab contract is selected yet.
+observations. Native CloudFormation source defines the first shared
+infrastructure component, a persistent S3 store for packaged Lambda artifacts,
+with an isolated uv-locked `cfn-lint` environment for local validation.
+Drillmaster governance and its session prompt are not yet implemented. No
+repository-wide infrastructure-as-code choice, broader shared-infrastructure
+design, lab framework, or lab contract is selected yet.
 
 ## Handoff boundary
 
@@ -61,6 +63,18 @@ repository-wide check runs:
 ```sh
 npx markdownlint-cli2
 ```
+
+The isolated virtual project in `tools/cloudformation/` pins `cfn-lint` 1.55.1
+and requires uv 0.12.2. Its canonical artifact-store validation is:
+
+```sh
+uv run --project tools/cloudformation --locked --isolated \
+  cfn-lint infra/artifact-store/template.yaml
+```
+
+This local repository-source check makes no AWS API call and does not establish
+deployment state. The native CloudFormation template does not add a deployment
+wrapper or select an IaC system for future labs.
 
 Shared governance adopts REUSE 3.3 as the repository's file-level SPDX
 licensing profile. The isolated virtual project in `tools/reuse/` declares
@@ -91,7 +105,7 @@ from this handoff.
 
 The npm manifest and lock file preserve the Markdown lint dependencies.
 `.gitignore` excludes local editor configuration, `node_modules`, npm debug
-logs, Vim swap files, and uv virtual environments.
+logs, Vim swap files, Python bytecode caches, and uv virtual environments.
 Infrastructure-as-code ignore rules remain deferred until the tool and runtime
 artifact conventions are selected.
 
@@ -174,7 +188,9 @@ priorities. Broader areas not yet developed include:
 - Drillmaster governance and session prompts
 - defining full AWS scope, identity provisioning, naming, tagging, and cost
   enforcement standards beyond the local parameter contract
-- defining architecture and the boundary between shared and lab infrastructure
-- writing `infra/` and `labs/` documentation
+- defining broader architecture and the boundary between shared and lab
+  infrastructure
+- writing broader `infra/` and `labs/` documentation
 - designing the lab template contract
-- selecting an infrastructure-as-code tool and reproducible local conventions
+- selecting infrastructure-as-code conventions for future shared components
+  and labs
