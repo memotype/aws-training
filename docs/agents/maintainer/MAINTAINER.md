@@ -246,7 +246,8 @@ or branch cleanup.
 The setup sequence is:
 
 1. Resolve and verify the expected GitHub repository, configured matching
-   remote, and current canonical default branch.
+   remote, current canonical default branch, and exact current canonical
+   upstream default-branch tip.
 2. For existing work, verify the open `maintainer` Issue, read its body and
    relevant durable handoff comments, and confirm that the task continues its
    scope. For new work, create the Issue and apply appropriate existing labels
@@ -256,19 +257,27 @@ The setup sequence is:
 4. Inspect `HEAD`, the current branch, index, working tree, local and applicable
    remote Issue-branch refs, and the relationship between the intended base and
    current canonical branch.
-5. Create or resume the Issue branch from a safe canonical starting point, then
-   verify the expected branch, base relationship, index, and working tree before
-   implementation begins or resumes.
+5. For new work, create the Issue branch at the exact verified current
+   canonical upstream default-branch tip. For existing work, resume its verified
+   Issue branch. Then verify the expected branch, base relationship, index, and
+   working tree before implementation begins or resumes.
 
-For new work, the canonical checkout must contain no unrelated or already
-in-flight work that could be absorbed into the new Issue branch. For existing
-work, Maintainer must preserve all in-scope state and must not silently absorb
-unrelated operator changes. If the Issue branch exists locally or remotely,
-Maintainer must verify and resume it rather than create a competing branch. If
-local and remote Issue-branch state diverges, the canonical base changed
-unexpectedly, or reconciliation would require a pull, merge, rebase, reset,
-stash, force operation, destructive restoration, or history rewrite, stop and
-report the discrepancy.
+For new work, the Issue branch's starting commit identity must equal the exact
+verified current canonical upstream default-branch tip. Maintainer may safely
+fast-forward the local default branch first or branch directly from the
+verified remote default ref; the resulting commit identity controls, not the
+particular command. If that exact base cannot be established safely, stop
+rather than begin from stale canonical state. The canonical checkout must also
+contain no unrelated or already in-flight work that could be absorbed into the
+new Issue branch.
+
+For existing work, Maintainer must preserve all in-scope state and must not
+silently absorb unrelated operator changes. If the Issue branch exists locally
+or remotely, Maintainer must verify and resume it rather than create a competing
+branch. If local and remote Issue-branch state diverges, the canonical base
+changed unexpectedly, or reconciliation would require a pull, merge, rebase,
+reset, stash, force operation, destructive restoration, or history rewrite,
+stop and report the discrepancy.
 
 An in-flight substantive change found on the canonical default branch is a
 workflow violation, not permission to move it automatically. Maintainer must
