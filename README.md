@@ -42,12 +42,18 @@ provided task:
 
 1. Open the repository with Codex CLI or a supported IDE integration.
 2. Copy and submit the complete `SESSION.md` prompt for the desired mode.
-3. Wait for Codex to read the governing documents and acknowledge the mode.
-4. Submit the repository-maintenance or examination task separately.
-5. Review the resulting changes, evidence, and any remaining actions.
+3. Wait for Codex to read the governing documents, acknowledge the mode, and
+   report the required orientation state.
+4. For Maintainer work, choose a specific existing Issue to continue or start a
+   new unit, then provide the scoped task. Submit an examination task directly
+   after Examiner initialization.
+5. Separately authorize later checkpoint, publication, merge, completion, or
+   cleanup outcomes as applicable, and review the resulting changes and
+   evidence.
 
-The session prompts are deliberate entry points. Starting a session does not
-itself authorize AWS changes, Git publication, or GitHub mutations.
+The session prompts are deliberate, read-only entry points. Starting a session
+does not itself select or create a work unit or authorize AWS changes, Git
+mutations, repository edits, or GitHub mutations.
 
 ## Agent Modes
 

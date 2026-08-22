@@ -13,6 +13,8 @@ milestone.
 
 ### Added
 
+- A reusable Maintainer post-merge cleanup prompt with canonical-publication,
+  branch-containment, clean-checkout, safe deletion, and final-state checks.
 - A versioned, gitignored, non-secret operator-configuration contract with safe
   tracked examples, named AWS profile separation, account and Region safety
   assertions, explicit bounded cost policy, and a shared standard-library
@@ -26,10 +28,11 @@ milestone.
 - Shared governance now distinguishes local parameters from authority and
   current AWS evidence while requiring credentials and runtime state to remain
   outside repository configuration and history.
-- Maintainer governance now uses dedicated work branches and pull requests as
-  the normal review boundary for material changes, with scoped workflow
-  authorization, lighter handling for minor maintenance, protected-branch
-  compliance, and separate merge and Issue-closure authority.
+- Maintainer governance now makes each substantive work unit one GitHub Issue
+  with a dedicated branch across ephemeral sessions, keeps initialization
+  read-only, permits concise Issue handoffs, prevents normal substantive work
+  and commits on the canonical default branch, and separates checkpoint,
+  publication, completion, and post-merge cleanup authority.
 
 ## v0.2.0 - 2026-08-19
 
