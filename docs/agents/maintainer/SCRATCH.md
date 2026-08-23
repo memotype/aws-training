@@ -25,22 +25,23 @@ training begins. Its planned responsibilities are:
 Maintainer governance, its operational prompts, the GitHub Issue-backed work
 lifecycle, the changelog and milestone model, and the MIT / CC BY 4.0 licensing
 design are implemented. Substantive Maintainer work uses one durable Issue and
-dedicated branch across ephemeral sessions; checkpoint, publication, closure,
-and post-merge cleanup remain separately authorized phases. A root README
-provides the human-facing project entry point, current status, governed startup
-workflow, repository map, and local validation commands. A tracked safe
-example, gitignored per-clone TOML file, shared offline Python reader, and
-external XDG runtime-state contract provide non-secret operator-local
-parameters without coupling the public repository to one AWS account. Initial
-Examiner governance and its session prompt are also implemented without
-mode-specific persistent working memory; examination context is reconstructed
-from canonical exercise material, trainee evidence, and authorized current
-observations. Native CloudFormation source defines the first shared
-infrastructure component, a persistent S3 store for packaged Lambda artifacts,
-with an isolated uv-locked `cfn-lint` environment for local validation.
-Drillmaster governance and its session prompt are not yet implemented. No
-repository-wide infrastructure-as-code choice, broader shared-infrastructure
-design, lab framework, or lab contract is selected yet.
+dedicated branch across ephemeral sessions; checkpoint, publication, Issue
+completion, and branch cleanup remain distinct outcomes, while one explicit
+post-merge invocation may authorize the last two together as an ordered,
+resumable workflow. A root README provides the human-facing project entry
+point, current status, governed startup workflow, repository map, and local
+validation commands. A tracked safe example, gitignored per-clone TOML file,
+shared offline Python reader, and external XDG runtime-state contract provide
+non-secret operator-local parameters without coupling the public repository to
+one AWS account. Initial Examiner governance and its session prompt are also
+implemented without mode-specific persistent working memory; examination
+context is reconstructed from canonical exercise material, trainee evidence,
+and authorized current observations. Native CloudFormation source defines the
+first shared infrastructure component, a persistent S3 store for packaged
+Lambda artifacts, with an isolated uv-locked `cfn-lint` environment for local
+validation. Drillmaster governance and its session prompt are not yet
+implemented. No repository-wide infrastructure-as-code choice, broader
+shared-infrastructure design, lab framework, or lab contract is selected yet.
 
 ## Handoff boundary
 

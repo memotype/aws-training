@@ -17,8 +17,10 @@ milestone.
   Lambda artifact bucket with bounded noncurrent-version and incomplete-upload
   retention, explicit retained-resource behavior, and reproducible uv-locked
   `cfn-lint` validation.
-- A reusable Maintainer post-merge cleanup prompt with canonical-publication,
-  branch-containment, clean-checkout, safe deletion, and final-state checks.
+- A reusable, resumable Maintainer post-merge completion prompt that verifies
+  canonical publication, records and closes the completed Issue, safely removes
+  any remaining work-branch refs, and accepts already-satisfied outcomes while
+  stopping on contradictory or changed state.
 - A versioned, gitignored, non-secret operator-configuration contract with safe
   tracked examples, named AWS profile separation, account and Region safety
   assertions, explicit bounded cost policy, and a shared standard-library
@@ -36,7 +38,9 @@ milestone.
   with a dedicated branch across ephemeral sessions, keeps initialization
   read-only, permits concise Issue handoffs, prevents normal substantive work
   and commits on the canonical default branch, and separates checkpoint,
-  publication, completion, and post-merge cleanup authority.
+  publication, Issue-completion, and branch-cleanup authority while allowing
+  one explicit post-merge invocation to authorize the last two as an ordered,
+  resumable workflow.
 
 ## v0.2.0 - 2026-08-19
 

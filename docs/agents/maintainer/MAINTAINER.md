@@ -328,35 +328,69 @@ self-merge, Issue closure, and branch cleanup are not part of publication.
 
 ### 6.4) Completion and post-merge cleanup
 
-Merge, Issue closure, and post-merge cleanup are separate outcomes. Issue
-closure follows section 5.2 of `docs/agents/SHARED.md` and requires immediate
-verification that the resolving state is present on the canonical branch.
-Cleanup must not begin until GitHub reports the pull request as merged, the
-related Issue is closed as completed, and the merged state is present on the
-current canonical default branch.
+Merge, Issue closure, and post-merge branch cleanup are separate outcomes.
+Issue closure follows section 5.2 of `docs/agents/SHARED.md` and requires
+immediate verification that the resolving state is present on the canonical
+branch. Branch cleanup must not begin until GitHub reports the pull request as
+merged, the related Issue is closed as completed, and the resolving state is
+present on the current canonical default branch.
 
-The operational `POST_MERGE.md` prompt may separately authorize cleanup for one
-exact repository, pull request, Issue, and Issue branch. Cleanup must resolve a
-unique matching remote, require a clean index and working tree, and begin on the
-named Issue branch. This cleanup procedure supports only the repository's
+The operational `POST_MERGE.md` prompt may explicitly authorize the distinct
+Issue-completion and branch-cleanup outcomes together as one ordered workflow
+for one exact repository, pull request, Issue, and Issue branch. This bounded
+authorization does not make either outcome implicit in merge or authorize any
+other Issue or ref mutation. The procedure supports only the repository's
 merge-commit workflow; squash- or rebase-merged work requires a different
 explicitly governed procedure.
 
-Before deletion, Maintainer must refresh the relevant refs and prove that the
-local Issue-branch tip is an ancestor of the canonical remote default branch.
-If the remote Issue branch exists, it must independently prove the same for the
-remote tip. After switching to the default branch and updating it by
-fast-forward only, Maintainer must repeat every applicable ancestry proof while
-the feature refs still exist. Git's normal safe local deletion is an additional
-check, not a substitute for explicit canonical containment evidence.
+The workflow must be safely resumable. At each stage, Maintainer must inspect
+authoritative local and GitHub state and either perform the expected outcome or
+verify that it is already satisfied. An Issue already closed as completed, or
+a named local or remote Issue branch already absent at the beginning of the
+workflow, is a satisfied outcome when all remaining identity, publication, and
+safety evidence is consistent. Maintainer must not reopen an Issue or recreate
+a branch merely to replay an outcome. An Issue closed for another reason, a ref
+or Issue state that changes unexpectedly after it is observed, or any other
+contradictory state stops the workflow.
 
-Only after every check succeeds may Maintainer delete the local Issue branch
-with safe deletion and, if still present and unchanged, delete that exact remote
-Issue branch. It must then verify the final default-branch synchronization,
-clean checkout, and absence of both feature refs. Any unexpected state,
-unpublished work, changed ref, failed ancestry proof, or need for merge, rebase,
-reset, stash, force, broad pruning, or destructive restoration stops cleanup
-without deletion or reconciliation.
+The workflow must resolve the expected repository, unique matching remote, and
+canonical default branch; require a clean index and working tree; verify
+through GitHub that the named pull request was merge-committed into that branch
+and that the resolving state is present there; and verify that the named Issue
+is the related Maintainer work unit. The checkout must begin attached either to
+the exact named Issue branch or to the canonical default branch. Starting on
+the default branch permits resumption after an earlier invocation switched to
+it, whether or not the local Issue branch deletion was already completed. A
+detached `HEAD` or any other starting branch stops the workflow.
+
+If the Issue lacks an adequate completion update, Maintainer may add one
+concise comment recording the pull request, merge commit, and verified
+canonical publication without duplicating existing handoff state. Immediately
+before closing an open Issue, Maintainer must repeat the canonical-publication
+verification, close that exact Issue as completed, and verify its resulting
+state. If the Issue is already closed as completed, Maintainer must verify that
+state and may add a missing completion update without reopening it. No branch
+cleanup may proceed until Issue completion is verified.
+
+Before any branch deletion, Maintainer must refresh the relevant refs, record
+which named local and remote Issue refs exist and their exact tips, and prove
+that every existing tip is an ancestor of the canonical remote default branch.
+A ref already absent at this initial observation must be recorded as such and
+must not be recreated. After switching to the default branch when necessary
+and updating it by fast-forward only, Maintainer must repeat every applicable
+ancestry proof while the Issue refs still exist. Git's normal safe local
+deletion is an additional check, not a substitute for explicit canonical
+containment evidence.
+
+Only after every applicable check succeeds may Maintainer safely delete the
+local Issue branch if it exists and delete the exact remote Issue branch if it
+exists and its tip is unchanged. A ref that is already absent satisfies its
+deletion outcome. Maintainer must then verify that the Issue remains closed as
+completed, the default branch is synchronized, the checkout is clean, and both
+Issue refs are absent. Any unexpected state, unpublished work, changed ref,
+failed ancestry proof, or need for merge, rebase, reset, stash, force, broad
+pruning, or destructive restoration stops the workflow without further
+mutation or reconciliation.
 
 ## 7) Maintainer actions requiring explicit authorization
 
