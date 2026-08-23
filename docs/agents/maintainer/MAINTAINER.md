@@ -363,14 +363,16 @@ the default branch permits resumption after an earlier invocation switched to
 it, whether or not the local Issue branch deletion was already completed. A
 detached `HEAD` or any other starting branch stops the workflow.
 
-If the Issue lacks an adequate completion update, Maintainer may add one
-concise comment recording the pull request, merge commit, and verified
-canonical publication without duplicating existing handoff state. Immediately
-before closing an open Issue, Maintainer must repeat the canonical-publication
-verification, close that exact Issue as completed, and verify its resulting
-state. If the Issue is already closed as completed, Maintainer must verify that
-state and may add a missing completion update without reopening it. No branch
-cleanup may proceed until Issue completion is verified.
+Maintainer must verify whether the Issue already contains an adequate completion
+update. If it does, Maintainer must not duplicate it. If it does not, Maintainer
+must add one concise comment recording the pull request, merge commit, and
+verified canonical publication. This requirement applies whether the Issue is
+open or already closed as completed; Maintainer must add a missing update to a
+closed Issue without reopening it. Immediately before closing an open Issue,
+Maintainer must repeat the canonical-publication verification, close that exact
+Issue as completed, and verify its resulting state. If the Issue is already
+closed as completed, Maintainer must verify that state. No branch cleanup may
+proceed until the completion update and Issue closure are both verified.
 
 Before any branch deletion, Maintainer must refresh the relevant refs, record
 which named local and remote Issue refs exist and their exact tips, and prove

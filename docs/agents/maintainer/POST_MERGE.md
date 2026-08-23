@@ -19,21 +19,23 @@ This task explicitly authorizes the distinct Issue-completion and branch-cleanup
 outcomes defined in section 6.4 of `MAINTAINER.md` together as one ordered
 workflow for only the named repository, pull request, Issue, and Issue branch.
 It authorizes the required read-only GitHub discovery and relevant ref refresh;
-one concise completion comment when needed; closure of the named Issue as
-completed when it is still open; switching the checkout to the canonical
-default branch; updating that branch by fast-forward only; and safe deletion of
-only the named Issue branch locally and remotely when each ref exists. It does
-not authorize repository-content changes, merging, reopening an Issue, mutation
-of any other Issue, or cleanup of any other ref.
+one concise completion comment if no adequate completion update is already
+present; closure of the named Issue as completed when it is still open;
+switching the checkout to the canonical default branch; updating that branch by
+fast-forward only; and safe deletion of only the named Issue branch locally and
+remotely when each ref exists. It does not authorize repository-content
+changes, merging, reopening an Issue, mutation of any other Issue, or cleanup
+of any other ref.
 
 The workflow is resumable. For each expected outcome, inspect current
 authoritative state and either perform the outcome or verify that it is already
-satisfied before continuing. Do not repeat an adequate completion comment,
-reopen an Issue already closed as completed, or recreate an Issue branch that
-is already absent. Treat the named Issue already closed as completed as an
-already-satisfied closure outcome, and treat an initially absent local or
-remote Issue branch as an already-satisfied deletion outcome, when the
-remaining state is consistent.
+satisfied before continuing. Verify and do not duplicate an adequate completion
+update that is already present. If none exists, add one whether the Issue is
+open or already closed as completed; do not reopen a closed Issue to add it. Do
+not recreate an Issue branch that is already absent. Treat the named Issue
+already closed as completed as an already-satisfied closure outcome, and treat
+an initially absent local or remote Issue branch as an already-satisfied
+deletion outcome, when the remaining state is consistent.
 
 Invoke section 6.4 completely. Resolve the expected repository, unique matching
 remote, and current canonical default branch rather than assuming their names.
