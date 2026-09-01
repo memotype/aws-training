@@ -37,14 +37,12 @@ class AwsProfiles:
     """Named AWS CLI profiles; credential-provider details remain external."""
 
     operator: str
-    maintainer_recovery: str | None = None
     examiner: str | None = None
     drillmaster: str | None = None
 
     def as_dict(self) -> dict[str, str | None]:
         return {
             "operator": self.operator,
-            "maintainer_recovery": self.maintainer_recovery,
             "examiner": self.examiner,
             "drillmaster": self.drillmaster,
         }
@@ -166,14 +164,11 @@ def load_config(
     profiles_table = _required_table(aws, "profiles", "aws")
     _reject_unknown(
         profiles_table,
-        {"operator", "maintainer_recovery", "examiner", "drillmaster"},
+        {"operator", "examiner", "drillmaster"},
         "aws.profiles",
     )
     profiles = AwsProfiles(
         operator=_required_string(profiles_table, "operator", "aws.profiles"),
-        maintainer_recovery=_optional_string(
-            profiles_table, "maintainer_recovery", "aws.profiles"
-        ),
         examiner=_optional_string(profiles_table, "examiner", "aws.profiles"),
         drillmaster=_optional_string(
             profiles_table, "drillmaster", "aws.profiles"

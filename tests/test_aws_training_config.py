@@ -67,7 +67,6 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(config.schema_version, 1)
         self.assertEqual(config.expected_account_id, "123456789012")
         self.assertEqual(config.profiles.operator, "aws-training-operator")
-        self.assertIsNone(config.profiles.maintainer_recovery)
         self.assertIsNone(config.profiles.examiner)
         self.assertIsNone(config.profiles.drillmaster)
         self.assertTrue(config.require_free_plan)
@@ -156,42 +155,6 @@ class ConfigTests(unittest.TestCase):
         )
 
         with self.assertRaisesRegex(ConfigError, "aws.profiles.operator"):
-            load_config(
-                config_path, repository_root=REPOSITORY_ROOT, environ={}
-            )
-
-    def test_optional_maintainer_recovery_profile_is_normalized(self) -> None:
-        config_path = self.write_config(
-            VALID_CONFIG.replace(
-                'operator = "operator-profile"',
-                'operator = "operator-profile"\n'
-                'maintainer_recovery = "  recovery-profile  "',
-            )
-        )
-
-        config = load_config(
-            config_path, repository_root=REPOSITORY_ROOT, environ={}
-        )
-
-        self.assertEqual(
-            config.profiles.maintainer_recovery, "recovery-profile"
-        )
-        self.assertEqual(
-            config.profiles.as_dict()["maintainer_recovery"],
-            "recovery-profile",
-        )
-
-    def test_empty_maintainer_recovery_profile_is_rejected(self) -> None:
-        config_path = self.write_config(
-            VALID_CONFIG.replace(
-                'operator = "operator-profile"',
-                'operator = "operator-profile"\nmaintainer_recovery = ""',
-            )
-        )
-
-        with self.assertRaisesRegex(
-            ConfigError, "aws.profiles.maintainer_recovery"
-        ):
             load_config(
                 config_path, repository_root=REPOSITORY_ROOT, environ={}
             )

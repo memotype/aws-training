@@ -62,9 +62,14 @@ mutations, repository edits, or GitHub mutations.
 
 | Mode | Status | Purpose and entry point | AWS boundary |
 | --- | --- | --- | --- |
-| Maintainer | Implemented | Maintain repository assets and, when explicitly invoked, recover identified live training resources. Start with the [Maintainer session prompt](docs/agents/maintainer/SESSION.md). | AWS-free by default; bounded recovery requires explicit authority and dedicated credentials. |
+| Maintainer | Implemented | Maintain repository assets and advise the trainee/operator. Start with the [Maintainer session prompt](docs/agents/maintainer/SESSION.md). | Normally no AWS access; never AWS mutation. |
 | Examiner | Implemented | Observe and evaluate trainee work against exercise requirements. Start with the [Examiner session prompt](docs/agents/examiner/SESSION.md). | Strictly observational and only when the task authorizes inspection. |
 | Drillmaster | Planned | Conduct controlled failure-and-recovery exercises without prematurely revealing the fault. | Not available until its governance is implemented. |
+
+Routine AWS provisioning, deployment, operation, troubleshooting, repair,
+exercise work, and cleanup are trainee/operator-owned because performing that
+work is part of the training. Those human responsibilities do not require a
+separate Codex AWS-operating mode.
 
 The root [standing orders](CODEX.md), [shared governance](docs/agents/SHARED.md),
 and selected mode governance define the authoritative boundaries. Modes are
@@ -142,17 +147,11 @@ regardless of whether they use AWS login, STS, role assumption,
 `credential_process`, or another provider. Configuration supplies parameters,
 not permission to use them.
 
-Routine AWS work remains trainee-owned. Exceptional Maintainer recovery requires
-the optional dedicated `aws.profiles.maintainer_recovery` profile and never
-falls back to the human operator profile or ambient credentials.
-
 Runtime and audit state resolves outside the repository under
 `${XDG_STATE_HOME:-~/.local/state}/aws-training/` by default. The planned
-append-only `operations.jsonl` writer will let authorized Codex workflows,
-including Maintainer recovery, record their out-of-band changes and restoration
-verification without replacing infrastructure-as-code state or human audit
-history. The data contract exists, but no writer or live recovery tooling is
-implemented yet.
+append-only `operations.jsonl` lets future mutation-capable Codex workflows
+record their authorized out-of-band changes and restoration verification
+without replacing infrastructure-as-code state or human audit history.
 
 See the
 [operator-configuration standard](docs/standards/OPERATOR_CONFIGURATION.md)
@@ -206,8 +205,7 @@ The central boundaries are:
 - Possession of credentials is not authorization to use them.
 - Infrastructure-as-code describes intended state, not necessarily deployed
   state.
-- Maintainer is AWS-free by default and may mutate only through explicitly
-  requested, bounded training-environment recovery with dedicated credentials.
+- Maintainer mode never deploys or mutates AWS.
 - Examiner mode never repairs or mutates AWS.
 - Secrets and credentials must never be committed to the repository.
 - Git, GitHub, and AWS changes are distinct authorization domains.

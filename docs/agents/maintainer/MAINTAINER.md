@@ -7,21 +7,22 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ## 1) Purpose
 
-Maintainer mode governs collaborative work on the repository and exceptional,
-operator-requested recovery of the live AWS training environment.
+Maintainer mode governs collaborative work on the repository itself.
 
-Its routine purpose is to develop and maintain the governance, documentation,
+Its purpose is to develop and maintain the governance, documentation,
 infrastructure-as-code source, lab structure, validation tooling, and other
-repository assets that support the AWS training range. Its exceptional purpose
-is to diagnose, stabilize, and recover identified live training resources when
-the operator explicitly invokes the bounded workflow in section 8.
+repository assets that support the AWS training range.
 
-Maintainer mode is not a training, grading, fault-injection, routine AWS
-deployment, or routine operations mode. The trainee owns routine provisioning,
-deployment, operation, troubleshooting, repair, exercise work, and cleanup
-because performing that work is part of the training. Editing a description of
-an AWS change, or the code that would perform one, does not authorize that
-change in AWS.
+Routine AWS provisioning, deployment, operation, troubleshooting, repair,
+exercise work, and cleanup are trainee/operator-owned because performing that
+work is part of the training. Maintainer may help diagnose problems
+conceptually, inspect repository source, and recommend AWS actions for the
+trainee/operator to perform. This ownership assignment does not require another
+Codex AWS-operating mode.
+
+Maintainer mode is not a training, grading, fault-injection, AWS deployment, or
+AWS operations mode. Editing a description of an AWS change, or the code that
+would perform one, does not authorize that change in AWS.
 
 ## 2) Authority and role
 
@@ -54,12 +55,6 @@ Maintainer may create or revise materials used by those modes, but it must not:
 - conceal a known problem as though a drill were underway
 - deploy, operate, troubleshoot, repair, complete, or clean up an ordinary
   training exercise on the trainee's behalf
-
-Maintainer may inspect or mutate AWS only through the explicit authority and
-workflow in section 8. Authority from Examiner or Drillmaster does not carry
-into Maintainer recovery. Recovery authority is limited to the invoked recovery
-task, ends at its required handoff, and does not carry into a later ordinary
-Maintainer task or across a mode switch.
 
 ## 4) Required Maintainer discovery
 
@@ -139,23 +134,20 @@ risks, ambiguities, design decisions, and deferred work. GitHub's issue number
 is the canonical identifier, open or closed state represents lifecycle, and
 comments and issue history record discussion and progress.
 
-A substantive Maintainer repository task is one durable unit of work
-represented by one open Maintainer Issue and one dedicated Issue work branch.
-Maintainer sessions are ephemeral execution contexts for that unit: a unit may
-span many sessions, and starting a fresh session neither replaces the Issue nor
-creates another one. Before new substantive repository implementation begins,
-the operator must choose an existing Issue to continue or identify the
-requested outcome as a new unit so the governed setup in section 6.1 can create
-its Issue. A live recovery task uses the external operations ledger and the
-handoff requirements in section 8; it does not become repository implementation
-or acquire Issue or branch authority merely because Maintainer performs it.
+A substantive Maintainer task is one durable unit of work represented by one
+open Maintainer Issue and one dedicated Issue work branch. Maintainer sessions
+are ephemeral execution contexts for that unit: a unit may span many sessions,
+and starting a fresh session neither replaces the Issue nor creates another
+one. Before new substantive implementation begins, the operator must choose an
+existing Issue to continue or identify the requested outcome as a new unit so
+the governed setup in section 6.1 can create its Issue.
 
-Substantive repository work includes new project capabilities, governance
-changes, tooling or dependency changes, infrastructure or lab changes, durable
-design decisions, and coherent multi-file changes that warrant their own
-review and history. Materiality follows engineering judgment, not line count.
-A tiny diff may be substantive, while a truly incidental correction need not
-become a durable unit merely for ceremony.
+Substantive work includes new project capabilities, governance changes,
+tooling or dependency changes, infrastructure or lab changes, durable design
+decisions, and coherent multi-file changes that warrant their own review and
+history. Materiality follows engineering judgment, not line count. A tiny diff
+may be substantive, while a truly incidental correction need not become a
+durable unit merely for ceremony.
 
 The Maintainer label model is intentionally small:
 
@@ -227,26 +219,23 @@ Within the scope of the current task, Maintainer may:
 - run local formatting, linting, tests, static analysis, and offline validation
 - update documentation to reflect verified repository behavior and intended
   infrastructure design
-- perform explicitly authorized live training-environment recovery only under
-  section 8
 - recommend work that requires additional authorization or another mode
 
-Except for the narrow read-only GitHub discovery in section 4 and recovery under
-section 8, these permissions cover working-tree work only. Git mutations,
-GitHub mutations, publication, and AWS operations remain distinct authority
-domains governed by `docs/agents/SHARED.md` and this document.
+Except for the narrow read-only GitHub discovery in section 4, these permissions
+cover working-tree work only. Git mutations, GitHub mutations, and publication
+remain governed separately by `docs/agents/SHARED.md` and section 5.1 of this
+document.
 
 Repository changes should remain simple, reviewable, deterministic, and
 directly connected to the training range.
 
 ### 6.1) Issue-backed working-tree workflow
 
-Substantive Maintainer repository work must be established on its dedicated
-Issue work branch before new implementation begins. Normal substantive
-repository work must not be performed or committed directly on the canonical
-default branch. The branch is durable for the Issue rather than for one session
-and must be resumed across sessions instead of replaced with a session-specific
-branch.
+Substantive Maintainer work must be established on its dedicated Issue work
+branch before new implementation begins. Normal substantive work must not be
+performed or committed directly on the canonical default branch. The branch is
+durable for the Issue rather than for one session and must be resumed across
+sessions instead of replaced with a session-specific branch.
 
 After initialization, an operator instruction to start a specified new
 substantive Maintainer unit invokes this bounded setup workflow, including the
@@ -418,12 +407,8 @@ mutation or reconciliation.
 Maintainer mode does not by itself authorize Codex to:
 
 - edit `CODEX.md`
-- perform AWS inspection, including STS `GetCallerIdentity`
-- perform AWS mutation outside an explicitly requested recovery under section 8
-- use the human operator profile or any AWS profile other than the configured
-  Maintainer recovery profile for recovery
-- run a cloud-connected infrastructure-as-code command outside an explicitly
-  authorized recovery operation
+- perform AWS inspection, including caller-identity discovery
+- run a cloud-connected infrastructure-as-code command
 - create, edit, label, comment on, reopen, or close a GitHub Issue
 - create, edit, or delete a GitHub label
 - create, move, delete, or push a Git tag
@@ -432,156 +417,33 @@ Maintainer mode does not by itself authorize Codex to:
 Authorization applies to the requested outcome under the workflow-level rules
 in `docs/agents/SHARED.md`; it need not enumerate every necessary command.
 
-An explicit operator request to diagnose and recover identified live training
-resources, with unambiguous intent that Codex may mutate AWS, invokes the
-recovery workflow in section 8. That request authorizes the requested recovery
-outcome and the conventional minimum operations directly necessary to achieve
-it; no magic phrase or command-by-command approval is required. It does not
-authorize a broader recovery, routine AWS work, or any other external outcome.
+An authorized AWS inspection or cloud-connected infrastructure-as-code command
+must still be non-mutating and satisfy the AWS inspection requirements in
+section 8. If such a command may produce an AWS or other external mutation, it
+is not permitted in Maintainer mode.
 
-## 8) AWS access and recovery boundary
+## 8) AWS access boundary
 
-Normal Maintainer initialization and repository work are AWS-free. Possession
-of credentials, repository work, a failed lab, source changes, or a request for
-an explanation does not activate AWS inspection or recovery authority.
+Maintainer work should normally be performed without AWS credentials.
 
-### 8.1) Responsibility and invocation
+Read-only AWS inspection is allowed only when all of the following are true:
 
-The trainee owns routine provisioning, deployment, operation, troubleshooting,
-repair, exercise work, and cleanup. Maintainer recovery exists to return a
-materially broken, damaged, tangled, or uncertain training environment to a
-usable known state, not to solve an ordinary lab problem on the trainee's
-behalf.
+- the current task explicitly requires inspection of deployed AWS state
+- the inspection is necessary to complete the repository-maintenance task
+- the credentials are read-only or more narrowly scoped
+- Codex first verifies the caller identity, expected account, expected Region,
+  and relevant training-resource scope
+- the queries are limited to the minimum necessary resources and data
 
-Recovery begins only when the operator explicitly requests diagnosis and
-recovery of identified live training resources or a defined training
-environment and unambiguously intends that Maintainer may mutate AWS to achieve
-that outcome. A request to help understand why a Lambda function is failing,
-for example, does not itself authorize a recovery mutation. A request to return
-a badly mangled lab environment to its documented baseline may invoke recovery
-when the target and desired outcome are sufficiently clear.
+Maintainer must clearly distinguish observed AWS state from intended state
+expressed by infrastructure-as-code.
 
-If mutation intent or the intended end state is ambiguous, Maintainer may
-perform only the read-only live diagnosis explicitly authorized by the current
-task and must stop for operator direction before mutation. Read-only diagnosis
-does not create recovery authority. Any live Maintainer diagnosis associated
-with possible recovery must use the recovery-specific credential and preflight
-in section 8.2 and remain limited to the minimum necessary target set and data.
-
-### 8.2) Credential isolation and preflight
-
-Maintainer recovery must load and require the optional
-`aws.profiles.maintainer_recovery` value from `.aws-training.local.toml`. It
-must use that exact named AWS CLI profile for every AWS call in the recovery
-workflow. It must never fall back to `aws.profiles.operator`, another configured
-profile, or ambient credentials, and it must not infer authority from broadly
-privileged credentials that happen to exist.
-
-The recovery identity should be scoped through IAM to the training range and
-plausible recovery operations rather than broad administration. If the profile
-is absent, unusable, mismatched, or insufficiently authorized for a necessary
-operation, Maintainer must stop and report the condition. It must not substitute
-another identity, broaden permissions, or attempt privilege escalation.
-
-After recovery is authorized and before broader inspection or mutation,
-Maintainer must:
-
-1. Load the operator-local configuration and the exact configured recovery
-   profile.
-2. Call STS `GetCallerIdentity` with that profile and verify the active AWS
-   principal and account against the expected account assertion.
-3. Explicitly select `aws.primary_region` or another Region permitted by the
-   current recovery task; it must not rely on an ambient or profile default.
-4. Verify the configured cost policy and any applicable current plan or cost
-   assertions required for the proposed work.
-5. Verify that the identified targets belong to the designated training range
-   through the strongest applicable account, Region, identifier, tag, naming,
-   and ownership evidence before broader inspection or mutation.
-
-The identity and narrowly targeted scope queries required for this preflight
-may be the first calls of the already-authorized diagnostic or recovery task.
-Preflight verifies safety conditions; success does not broaden authority.
-Failure, inability to verify, mismatch, or unexpected state stops the workflow.
-
-### 8.3) Recovery outcomes and limits
-
-A legitimate recovery outcome is one of:
-
-1. restoring documented intended state;
-2. returning specified resources to an explicitly selected known-safe
-   baseline; or
-3. stabilizing the environment sufficiently for a clear operator handoff.
-
-Recovery must not become routine deployment ownership, ordinary lab
-troubleshooting performed for the trainee, completion of unfinished exercise
-work, opportunistic redesign or enhancement, unrelated cleanup, or a shortcut
-around Examiner or Drillmaster boundaries. Narrowly targeted cleanup is
-permitted only when directly necessary to reach the authorized recovery
-outcome.
-
-Repository source, infrastructure-as-code, configuration, and current
-documentation may establish intended state, but they do not prove current
-deployed state. Stale notes, cached observations, generated plans, previous
-session memory, and prior reports must not be used to invent the desired live
-state. If intended state cannot be established reliably or several materially
-different valid recovery outcomes exist, Maintainer must stop and obtain the
-operator's choice.
-
-The absolute prohibitions in `CODEX.md` remain absolute. Recovery does not
-authorize privilege escalation, IAM-boundary or guardrail bypass, account-wide
-or Region-wide cleanup, destructive key deletion, destruction of the only
-recoverable data, state, credentials, keys, or restoration material, mutation
-outside the designated training scope, or materially different cost exposure
-merely for convenience.
-
-### 8.4) Recovery workflow
-
-For one explicitly requested recovery outcome, Maintainer must:
-
-1. Resolve the intended recovery outcome and exact target scope.
-2. Load and require the configured Maintainer recovery profile.
-3. Complete the active-principal, account, Region, cost, and training-scope
-   preflight in section 8.2 before broader inspection or mutation.
-4. Inspect current live AWS state and distinguish observed state, documented
-   intended state, inference, and any operator-selected target state.
-5. Establish the minimum recovery path and identify relevant security,
-   availability, persistence, cost, data-loss, rollback, and restoration
-   implications.
-6. Stop for operator direction before a materially destructive, irreversible,
-   unexpectedly costly, ambiguous, or out-of-scope action.
-7. Verify that the operations-ledger writer required by section 8.5 is
-   available and can safely use the configured external state location.
-8. Perform only the minimum necessary mutations with the configured recovery
-   profile and record every applicable mutation through that writer.
-9. Reinspect AWS and verify the resulting live state rather than assuming that
-   commands succeeded.
-10. Report the achieved state, remaining discrepancies, relevant costs and
-    risks, and any work handed back to the operator.
-11. End recovery authority at that handoff.
-
-If authoritative state changes unexpectedly during the workflow, Maintainer
-must stop and reassess rather than continue from stale observations. The
-workflow does not authorize Git, GitHub, repository, credential, or IAM
-mutations unless the current task separately authorizes those outcomes.
-
-### 8.5) Operations ledger
-
-Maintainer recovery is an authorized producer of the version 1
-`operations.jsonl` contract in
-`docs/standards/OPERATOR_CONFIGURATION.md` when it performs AWS mutations. It
-must use that contract rather than invent another audit mechanism. Each mutated
-resource requires its own append-only `operation` record with mode
-`maintainer`, the configured profile and observed principal, account and Region
-evidence, pre-change state, and any restoration obligation. When restoration is
-required, later live verification must append the applicable
-`restoration_verified` record without rewriting the original event.
-
-The data contract exists, but no safe ledger writer is currently implemented.
-Until compatible writing automation is implemented and validated, Maintainer
-must stop before a recovery mutation rather than substitute manual entries,
-omit required records, or claim that recording is available. A writer failure
-during recovery stops further mutation and must be reported together with the
-actual AWS and ledger state already reached.
+Maintainer mode never authorizes AWS mutation. This includes direct API or CLI
+changes and mutation through infrastructure-as-code, SDKs, consoles, scripts,
+or other tools. If AWS mutation is required, Maintainer must stop and recommend
+the action for the trainee/operator to perform. A different Codex mode may
+mutate only for its separately governed purpose; ordinary human AWS operations
+do not need a corresponding Codex mode.
 
 ## 9) Infrastructure-as-code and tooling
 
@@ -591,10 +453,6 @@ subject to the common standards in `docs/agents/SHARED.md`.
 Creating or changing source does not authorize initializing a cloud-connected
 backend, refreshing deployed state, generating a cloud-connected plan, running
 provisioners, deploying resources, or otherwise causing an external effect.
-An explicitly authorized recovery may use a cloud-connected tool only when it
-is the minimum safe means to reach the recovery outcome and every section 8
-requirement is satisfied; ordinary infrastructure deployment remains the
-trainee's responsibility.
 
 Maintainer should prefer the smallest design that safely supports the training
 goal and should not add infrastructure, dependencies, or abstractions merely
@@ -666,10 +524,10 @@ finalized, or locally validated.
 
 ## 12) Verification and completion
 
-Before completing a Maintainer repository task, Codex must verify the
-repository changes in proportion to their risk. Verification may include
-document review, formatting, static validation, tests, and inspection of the
-final working-tree changes.
+Before completing a Maintainer task, Codex must verify the repository changes
+in proportion to their risk. Verification may include document review,
+formatting, static validation, tests, and inspection of the final working-tree
+changes.
 
 A Maintainer task is complete when:
 
@@ -681,11 +539,3 @@ A Maintainer task is complete when:
 
 Local verification establishes facts about repository source only. It does not
 establish current AWS state or successful deployment.
-
-A Maintainer recovery task reaches handoff only after the section 8 workflow
-has reinspected the live targets, recorded the applicable ledger events, and
-reported the achieved and remaining state. If recovery cannot proceed or
-complete, Maintainer must report the last verified live state, any mutations
-already performed, outstanding restoration obligations, and the exact blocker.
-Recovery handoff ends its AWS authority whether the requested state was fully
-reached or the workflow stopped safely.

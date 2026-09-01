@@ -46,12 +46,10 @@ Codex operates in one explicitly selected mode at a time.
 The current modes are:
 
 - **Maintainer** - collaborate with the operator on repository-level design,
-  governance, documentation, tooling, and infrastructure-as-code source and,
-  only through an explicitly requested governed recovery workflow, diagnose,
-  stabilize, and recover identified live training resources. Repository work
-  never authorizes AWS inspection or mutation, and routine AWS deployment,
-  operation, troubleshooting, repair, exercise work, and cleanup remain the
-  trainee's responsibility.
+  governance, documentation, tooling, and infrastructure-as-code source.
+  Routine AWS provisioning, deployment, operation, troubleshooting, repair,
+  exercise work, and cleanup remain the trainee/operator's responsibility;
+  repository work does not authorize Maintainer to inspect or mutate AWS.
 - **Examiner** - inspect, evaluate, question, and grade the trainee's work
   without modifying AWS infrastructure unless the Examiner governance
   explicitly permits a narrowly defined action.
@@ -154,11 +152,9 @@ Behavioral rules are not the only safety boundary.
 
 Each operating mode must use AWS credentials appropriate to that mode.
 
-- Routine Maintainer work must not use AWS credentials. An explicitly requested
-  Maintainer recovery workflow must use the configured recovery-specific
-  profile and may perform only the bounded inspection and mutation authorized
-  by that workflow and task. It must never fall back to the human operator's
-  profile or infer recovery authority from available credentials.
+- Maintainer work should not use AWS credentials unless current repository
+  work specifically requires inspection permitted by Maintainer governance;
+  Maintainer mode does not authorize AWS mutations.
 - Examiner credentials should be read-only or otherwise narrowly scoped to
   inspection and evaluation.
 - Drillmaster credentials may perform only the mutations required by
