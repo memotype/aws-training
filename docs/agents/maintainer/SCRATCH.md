@@ -28,12 +28,17 @@ design are implemented. Substantive Maintainer work uses one durable Issue and
 dedicated branch across ephemeral sessions; checkpoint, publication, Issue
 completion, and branch cleanup remain distinct outcomes, while one explicit
 post-merge invocation may authorize the last two together as an ordered,
-resumable workflow. A root README provides the human-facing project entry
-point, current status, governed startup workflow, repository map, and local
-validation commands. A tracked safe example, gitignored per-clone TOML file,
-shared offline Python reader, and external XDG runtime-state contract provide
-non-secret operator-local parameters without coupling the public repository to
-one AWS account. Initial Examiner governance and its session prompt are also
+resumable workflow. Routine AWS provisioning, deployment, operation,
+troubleshooting, repair, exercise work, and cleanup are trainee/operator-owned
+training work. Maintainer remains repository-focused and advisory, has no AWS
+mutation authority, and does not need a separate Codex AWS-operating mode for
+those human responsibilities. A root README provides the human-facing project
+entry point, current status, governed startup workflow, repository map, and
+local validation commands. A tracked safe example, gitignored per-clone TOML
+file, shared offline Python reader, and external XDG runtime-state contract
+provide non-secret operator-local parameters without coupling the public
+repository to one AWS account. Initial Examiner governance and its session
+prompt are also
 implemented without mode-specific persistent working memory; examination
 context is reconstructed from canonical exercise material, trainee evidence,
 and authorized current observations. Native CloudFormation source defines the

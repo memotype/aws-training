@@ -62,9 +62,14 @@ mutations, repository edits, or GitHub mutations.
 
 | Mode | Status | Purpose and entry point | AWS boundary |
 | --- | --- | --- | --- |
-| Maintainer | Implemented | Maintain governance, documentation, tooling, and infrastructure-as-code source. Start with the [Maintainer session prompt](docs/agents/maintainer/SESSION.md). | Normally no AWS access; never AWS mutation. |
+| Maintainer | Implemented | Maintain repository assets and advise the trainee/operator. Start with the [Maintainer session prompt](docs/agents/maintainer/SESSION.md). | Normally no AWS access; never AWS mutation. |
 | Examiner | Implemented | Observe and evaluate trainee work against exercise requirements. Start with the [Examiner session prompt](docs/agents/examiner/SESSION.md). | Strictly observational and only when the task authorizes inspection. |
 | Drillmaster | Planned | Conduct controlled failure-and-recovery exercises without prematurely revealing the fault. | Not available until its governance is implemented. |
+
+Routine AWS provisioning, deployment, operation, troubleshooting, repair,
+exercise work, and cleanup are trainee/operator-owned because performing that
+work is part of the training. Those human responsibilities do not require a
+separate Codex AWS-operating mode.
 
 The root [standing orders](CODEX.md), [shared governance](docs/agents/SHARED.md),
 and selected mode governance define the authoritative boundaries. Modes are

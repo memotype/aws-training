@@ -41,6 +41,10 @@ milestone.
   publication, Issue-completion, and branch-cleanup authority while allowing
   one explicit post-merge invocation to authorize the last two as an ordered,
   resumable workflow.
+- Assigned routine AWS provisioning, deployment, operation, troubleshooting,
+  repair, exercise work, and cleanup to the trainee/operator as part of the
+  training, while keeping Maintainer repository-focused, advisory, and without
+  AWS mutation authority.
 
 ## v0.2.0 - 2026-08-19
 

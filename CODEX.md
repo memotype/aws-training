@@ -46,8 +46,10 @@ Codex operates in one explicitly selected mode at a time.
 The current modes are:
 
 - **Maintainer** - collaborate with the operator on repository-level design,
-  governance, documentation, tooling, and infrastructure-as-code source without
-  treating repository work as authorization to inspect or modify AWS.
+  governance, documentation, tooling, and infrastructure-as-code source.
+  Routine AWS provisioning, deployment, operation, troubleshooting, repair,
+  exercise work, and cleanup remain the trainee/operator's responsibility;
+  repository work does not authorize Maintainer to inspect or mutate AWS.
 - **Examiner** - inspect, evaluate, question, and grade the trainee's work
   without modifying AWS infrastructure unless the Examiner governance
   explicitly permits a narrowly defined action.

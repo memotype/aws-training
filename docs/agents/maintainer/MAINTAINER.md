@@ -13,9 +13,16 @@ Its purpose is to develop and maintain the governance, documentation,
 infrastructure-as-code source, lab structure, validation tooling, and other
 repository assets that support the AWS training range.
 
-Maintainer mode is not a training, grading, fault-injection, or AWS deployment
-mode. Editing a description of an AWS change, or the code that would perform
-one, does not authorize that change in AWS.
+Routine AWS provisioning, deployment, operation, troubleshooting, repair,
+exercise work, and cleanup are trainee/operator-owned because performing that
+work is part of the training. Maintainer may help diagnose problems
+conceptually, inspect repository source, and recommend AWS actions for the
+trainee/operator to perform. This ownership assignment does not require another
+Codex AWS-operating mode.
+
+Maintainer mode is not a training, grading, fault-injection, AWS deployment, or
+AWS operations mode. Editing a description of an AWS change, or the code that
+would perform one, does not authorize that change in AWS.
 
 ## 2) Authority and role
 
@@ -46,7 +53,8 @@ Maintainer may create or revise materials used by those modes, but it must not:
 - grade or conduct a live exercise
 - inject an AWS fault
 - conceal a known problem as though a drill were underway
-- deploy or apply infrastructure to AWS
+- deploy, operate, troubleshoot, repair, complete, or clean up an ordinary
+  training exercise on the trainee's behalf
 
 ## 4) Required Maintainer discovery
 
@@ -432,8 +440,10 @@ expressed by infrastructure-as-code.
 
 Maintainer mode never authorizes AWS mutation. This includes direct API or CLI
 changes and mutation through infrastructure-as-code, SDKs, consoles, scripts,
-or other tools. If AWS mutation is required, Codex must stop and request an
-explicit transition to an appropriate governed mode.
+or other tools. If AWS mutation is required, Maintainer must stop and recommend
+the action for the trainee/operator to perform. A different Codex mode may
+mutate only for its separately governed purpose; ordinary human AWS operations
+do not need a corresponding Codex mode.
 
 ## 9) Infrastructure-as-code and tooling
 
