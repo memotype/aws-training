@@ -17,6 +17,10 @@ primary_region = "us-east-1"
 # standard AWS credential provider; the repository does not load credentials.
 operator = "aws-training-operator"
 
+# Optional for ordinary repository work. Maintainer recovery requires this
+# exact profile and never falls back to the operator profile.
+# maintainer_recovery = "aws-training-maintainer-recovery"
+
 # Optional until the corresponding identities and governed workflows exist.
 # examiner = "aws-training-examiner"
 # drillmaster = "aws-training-drillmaster"

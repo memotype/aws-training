@@ -43,10 +43,11 @@ described as non-empty are trimmed during normalization.
 | Field | Requirement | Meaning |
 | --- | --- | --- |
 | `schema_version` | Required integer `1` | Version of this TOML configuration contract. |
-| `aws.expected_account_id` | Required 12-digit string | Safety assertion for future caller-identity comparison. |
+| `aws.expected_account_id` | Required 12-digit string | Safety assertion for the account reported by STS `GetCallerIdentity`. |
 | `aws.account_label` | Optional non-empty string | Human-readable label with no identity or authorization effect. |
 | `aws.primary_region` | Required non-empty string | Expected Region for future preflight checks. |
 | `aws.profiles.operator` | Required non-empty string | AWS CLI profile for separately authorized human-operator workflows. |
+| `aws.profiles.maintainer_recovery` | Optional non-empty string | Dedicated profile required for explicitly invoked Maintainer recovery. |
 | `aws.profiles.examiner` | Optional non-empty string | Future read-only Examiner profile. |
 | `aws.profiles.drillmaster` | Optional non-empty string | Future Drillmaster profile. |
 | `resources.prefix` | Required non-empty string | Prefix for training-range resources. |
@@ -55,11 +56,19 @@ described as non-empty are trimmed during normalization.
 | `cost.max_out_of_pocket_usd` | Required finite non-negative number | Explicit out-of-pocket cost ceiling. |
 | `state.directory` | Optional non-empty path string | Override for external runtime state. |
 
+The Maintainer recovery profile remains optional for ordinary repository use,
+but an invoked recovery workflow requires it. Maintainer must use that exact
+profile for recovery diagnosis and mutation and must never fall back to the
+human operator profile, another configured profile, or ambient credentials. An
+absent, unusable, mismatched, or insufficiently authorized recovery profile
+stops the workflow. The recovery identity should ultimately be scoped to the
+training range and plausible recovery operations rather than broad
+administration.
+
 Examiner and Drillmaster profile names remain optional until those identities
-and workflows are provisioned. Maintainer has no AWS profile field because
-routine Maintainer work has no AWS identity requirement. The configuration
-does not prescribe whether a profile ultimately represents a user, role,
-federated session, or another standard AWS credential-provider chain.
+and workflows are provisioned. The configuration does not prescribe whether a
+profile ultimately represents a user, role, federated session, or another
+standard AWS credential-provider chain.
 
 Every configured range has an explicit cost policy, and no workflow may assume
 unrestricted spending. When `cost.require_free_plan` is `true`,
@@ -106,7 +115,7 @@ any AWS query occurs. Required preflight observations may be the first queries
 of that already-authorized workflow; they do not depend on a caller-identity
 check having happened earlier.
 
-The intended sequence is:
+The general intended sequence is:
 
 ```text
 load local configuration
@@ -125,6 +134,14 @@ other required account/plan/scope checks
         |
 authorized AWS work may proceed
 ```
+
+STS `GetCallerIdentity` verifies the active AWS principal and account for the
+selected profile; it does not verify an ambient "caller" independently of that
+credential selection. Maintainer recovery must select only
+`aws.profiles.maintainer_recovery`. Failure to load or use it, an account or
+principal mismatch, or insufficient permission for a necessary recovery
+operation stops recovery rather than triggering profile substitution or
+privilege escalation.
 
 Preflight determines whether subsequent operations already within that
 workflow's authority may proceed. Failure, inability to verify, or mismatch
@@ -161,11 +178,13 @@ context has become stale.
 
 ## Operations and cleanup ledger
 
-Future mutation-capable Codex workflows use `operations.jsonl` beneath the
+Authorized mutation-capable Codex workflows use `operations.jsonl` beneath the
 resolved state directory to automatically record mutations they perform under
-an authorized active mode and task. The ledger is append-only and uses contract
-version `1`. Each line is one complete UTF-8 JSON object. Writers must durably
-append new events without rewriting, removing, or reordering earlier lines.
+an authorized active mode and task. Maintainer recovery is an authorized
+producer when it performs AWS mutations. The ledger is append-only and uses
+contract version `1`. Each line is one complete UTF-8 JSON object. Writers must
+durably append new events without rewriting, removing, or reordering earlier
+lines.
 
 The ledger records operational intent, out-of-band mutations, and restoration
 obligations for agent-generated training mutations. It supplements CloudTrail
@@ -176,7 +195,7 @@ responsible for the lifecycle and rollback of resources it owns.
 
 Ordinary human/operator AWS work does not need manual ledger entries. The
 operator must not be expected to hand-edit or append JSONL records for that
-activity. Ledger-writing automation remains the responsibility of a future
+activity. Ledger-writing automation remains the responsibility of each
 authorized mutation-capable Codex workflow.
 
 Version 1 defines exactly two event types:
@@ -218,5 +237,8 @@ JSONL lines:
 {"schema_version":1,"event_type":"restoration_verified","event_id":"d8f9da96-5248-4d76-b072-5d8903429260","verified_at":"2026-08-21T14:45:00Z","mode":"drillmaster","operation_event_id":"6ed7676f-50f4-4729-ad13-136209aba02d","aws":{"profile":"aws-training-drillmaster","principal_arn":"arn:aws:sts::123456789012:assumed-role/aws-training-drillmaster/example-session","account_id":"123456789012","region":"us-east-1"},"verification":{"summary":"instance returned to running and both status checks passed","evidence_ref":"observations/6ed7676f-restored.json"}}
 ```
 
-Ledger writers, AWS preflight checks, IAM identities, and mutation workflows are
-future work. Nothing in this contract authorizes their implementation or use.
+No ledger writer, AWS preflight implementation, or recovery IAM identity exists
+yet. Maintainer recovery governance requires a compatible validated writer
+before mutation and therefore stops before mutation while that dependency is
+absent. This contract authorizes neither tooling implementation nor AWS use by
+itself; those outcomes still require the active governance and current task.

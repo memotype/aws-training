@@ -28,12 +28,18 @@ design are implemented. Substantive Maintainer work uses one durable Issue and
 dedicated branch across ephemeral sessions; checkpoint, publication, Issue
 completion, and branch cleanup remain distinct outcomes, while one explicit
 post-merge invocation may authorize the last two together as an ordered,
-resumable workflow. A root README provides the human-facing project entry
-point, current status, governed startup workflow, repository map, and local
-validation commands. A tracked safe example, gitignored per-clone TOML file,
-shared offline Python reader, and external XDG runtime-state contract provide
-non-secret operator-local parameters without coupling the public repository to
-one AWS account. Initial Examiner governance and its session prompt are also
+resumable workflow. Maintainer also defines exceptional, explicitly requested,
+bounded recovery for a materially broken or uncertain live training
+environment while leaving routine AWS work trainee-owned. Recovery uses a
+dedicated profile, strict preflight, minimum necessary mutation, the external
+operations ledger, live verification, and a terminal handoff; it remains
+non-operational until its credential identity, preflight, and safe ledger writer
+exist. A root README provides the human-facing project entry point, current
+status, governed startup workflow, repository map, and local validation
+commands. A tracked safe example, gitignored per-clone TOML file, shared offline
+Python reader, and external XDG runtime-state contract provide non-secret
+operator-local parameters without coupling the public repository to one AWS
+account. Initial Examiner governance and its session prompt are also
 implemented without mode-specific persistent working memory; examination
 context is reconstructed from canonical exercise material, trainee evidence,
 and authorized current observations. Native CloudFormation source defines the
@@ -127,7 +133,9 @@ separate design, governance, implementation, and validation.
 shape, while `.aws-training.local.toml` is the explicitly ignored per-clone
 file. AWS CLI profile names abstract external credential providers; the
 operator profile is required, Examiner and Drillmaster profiles remain
-optional, and Maintainer has no AWS profile. The Python 3.11 standard-library
+optional, and `aws.profiles.maintainer_recovery` is optional for repository use
+but mandatory for an invoked recovery. Recovery never falls back to the
+operator profile or ambient credentials. The Python 3.11 standard-library
 reader in `tools/aws_training_config.py` requires TOML contract version 1 and
 validates and normalizes the shared contract without contacting AWS or loading
 credentials. Each clone declares a bounded cost policy; the safe example
@@ -136,15 +144,16 @@ also supports non-Free-plan accounts with a finite non-negative ceiling.
 
 Expected account and primary Region values are future preflight safety
 assertions, not current observations or authority. In an already-authorized AWS
-workflow, caller identity is an initial preflight query and regional calls must
-select the configured or exercise-permitted Region explicitly. Runtime state
-defaults to the external XDG state location and may be overridden only to
-another path outside the Git working tree. The version 1 append-only
-`operations.jsonl` contract is only for future mutation-capable Codex workflows
-to record per-resource operation events and later `restoration_verified` events
-that reference the originals; it does not require human-authored entries. No
-writer, AWS preflight, mutation workflow, or external runtime directory exists
-yet.
+workflow, STS `GetCallerIdentity` verifies the active principal and account as
+an initial preflight query, and regional calls must select the configured or
+exercise-permitted Region explicitly. Runtime state defaults to the external
+XDG state location and may be overridden only to another path outside the Git
+working tree. The version 1 append-only `operations.jsonl` contract records
+per-resource Codex mutations and later `restoration_verified` events that
+reference the originals; it does not require human-authored entries. Maintainer
+recovery is an authorized producer, but no safe writer, AWS preflight,
+recovery-specific IAM identity, mutation executor, or external runtime
+directory exists yet.
 
 ## Remaining SPDX work
 
@@ -170,8 +179,8 @@ commits, GitHub Issues, or this handoff.
 
 Repository source describes governance and intended future design only. It
 does not establish current deployed AWS state. No live AWS evidence is recorded
-for this maintenance phase, and Maintainer performs no AWS mutation or
-deployment.
+for this maintenance phase, and the current repository work performs no
+recovery, AWS mutation, or deployment.
 
 ## Cross-mode authority
 
@@ -195,3 +204,6 @@ priorities. Broader areas not yet developed include:
 - designing the lab template contract
 - selecting infrastructure-as-code conventions for future shared components
   and labs
+- implementing and validating the Maintainer recovery IAM identity, preflight,
+  safe operations-ledger writer, and minimum mutation executor before live
+  recovery can operate

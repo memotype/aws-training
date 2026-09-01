@@ -22,9 +22,9 @@ milestone.
   any remaining work-branch refs, and accepts already-satisfied outcomes while
   stopping on contradictory or changed state.
 - A versioned, gitignored, non-secret operator-configuration contract with safe
-  tracked examples, named AWS profile separation, account and Region safety
-  assertions, explicit bounded cost policy, and a shared standard-library
-  reader and validator.
+  tracked examples, named AWS profile separation including an optional dedicated
+  Maintainer recovery profile, account and Region safety assertions, explicit
+  bounded cost policy, and a shared standard-library reader and validator.
 - External XDG runtime-state conventions and a minimal versioned, append-only
   operations and cleanup ledger contract for future authorized Codex mutations
   and restoration-verification workflows.
@@ -41,6 +41,10 @@ milestone.
   publication, Issue-completion, and branch-cleanup authority while allowing
   one explicit post-merge invocation to authorize the last two as an ordered,
   resumable workflow.
+- Maintainer now keeps routine AWS work trainee-owned while supporting only
+  explicitly requested, bounded training-environment recovery with a dedicated
+  profile, live safety preflight, minimum necessary mutation, external ledger
+  recording requirements, verified handoff, and no authority carryover.
 
 ## v0.2.0 - 2026-08-19
 
