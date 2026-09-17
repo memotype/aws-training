@@ -60,6 +60,34 @@ The Maintainer session uses a read-only initialization handshake: complete
 discovery, acknowledge the mode, report orientation state, and stop for the
 operator to select an existing Issue or a new work unit.
 
+## Preserved uv compatibility work
+
+Pending work to allow uv patch releases within the 0.12 series is preserved in
+the local stash commit
+`3cba7d989c7ae855137411384801eeea96fcfbbb`. The stash was created from commit
+`76ead3f9d67a06bf200617dbb055ea7999d31983` on
+`issue-8-external-host-side-effects` and contains only these paths:
+
+- `tools/cloudformation/pyproject.toml`
+- `tools/reuse/pyproject.toml`
+
+The combined full-index binary patch has SHA-256 fingerprint
+`a476cc52fc35e576f73776e9f7de7bf8b5a3f7b325f25d40741697983b5f37a8`.
+The individual diff and resulting Git blob fingerprints are:
+
+| Path | Diff SHA-256 | Resulting blob |
+| --- | --- | --- |
+| `tools/cloudformation/pyproject.toml` | `80b1a352c2f5749d35fb955f51e9a3c7fe562a672e825de89cd5ee181ede2083` | `c162e9b53776d6062eabc0a8a501c6cc75b4d638` |
+| `tools/reuse/pyproject.toml` | `e07040a71ef9042fdd7bd7cf29b5375a549aa220c36131e770d6316e31aba60b` | `b33ab63ddc7ac8de0ef4d0a46a3140e4a7591a2c` |
+
+After Issue #8 is completed and a dedicated Maintainer Issue branch is
+established for this tooling change, recover the work with `git stash apply`
+using the stable stash commit ID, verify the fingerprints, and retain the stash
+until the restored work is safely committed. The same work unit must update the
+exact uv-version wording in this file and `README.md`. Remove this temporary
+handoff section once the stash has been recovered and no longer provides useful
+state.
+
 ## Repository tooling
 
 The repository uses locally installed `markdownlint-cli2` with configuration in

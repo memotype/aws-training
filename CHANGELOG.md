@@ -17,6 +17,10 @@ milestone.
   Lambda artifact bucket with bounded noncurrent-version and incomplete-upload
   retention, explicit retained-resource behavior, and reproducible uv-locked
   `cfn-lint` validation.
+- Shared command-execution rules that classify local, outbound, host, external,
+  and AWS effects by actual behavior, together with a bounded helper for
+  deleting task-owned temporary directories through explicit containment,
+  filesystem-boundary, and post-deletion checks.
 - A reusable, resumable Maintainer post-merge completion prompt that verifies
   canonical publication, records and closes the completed Issue, safely removes
   any remaining work-branch refs, and accepts already-satisfied outcomes while
