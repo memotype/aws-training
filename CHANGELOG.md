@@ -35,6 +35,9 @@ milestone.
 
 ### Changed
 
+- Local REUSE and CloudFormation validation now accept compatible uv 0.12 patch
+  releases from 0.12.2 while reserving uv 0.13 for a future compatibility
+  review.
 - Shared governance now distinguishes local parameters from authority and
   current AWS evidence while requiring credentials and runtime state to remain
   outside repository configuration and history.

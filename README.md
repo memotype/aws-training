@@ -102,9 +102,9 @@ Before beginning governed work:
 - Choose Maintainer or Examiner mode and submit its session prompt.
 - Use an authenticated GitHub CLI (`gh`) for Maintainer initialization, which
   verifies the repository and reads the live Maintainer issue queue.
-- Install uv 0.12.2 with Python 3.10 or newer. The repository uses uv for
-  pinned licensing and CloudFormation validation and `uvx` to launch its
-  project-scoped AWS knowledge integration.
+- Install uv 0.12.2 or a later 0.12 patch release with Python 3.10 or newer.
+  The repository uses uv for pinned licensing and CloudFormation validation
+  and `uvx` to launch its project-scoped AWS knowledge integration.
 - Use Python 3.11 or newer for the standard-library operator-configuration
   reader and its tests.
 - Configure AWS credentials only when an exercise and active mode explicitly
