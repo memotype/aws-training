@@ -1,0 +1,55 @@
+# SPDX-FileCopyrightText: 2026 Isaac Freeman <memotype@gmail.com>
+# SPDX-License-Identifier: MIT
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Temporary SQS queue for the CloudFormation lifecycle lab.
+
+Parameters:
+  VisibilityTimeoutSeconds:
+    Type: Number
+    Default: 30
+    Description: SQS message visibility timeout in seconds.
+    MinValue: 0
+    MaxValue: 43200
+  ProjectTagValue:
+    Type: String
+    Default: aws-training
+    Description: Value for the standard Project resource tag.
+    MinLength: 1
+    MaxLength: 256
+  EnvironmentTagValue:
+    Type: String
+    Default: training
+    Description: Value for the standard Environment resource tag.
+    MinLength: 1
+    MaxLength: 256
+  ManagedByTagValue:
+    Type: String
+    Default: aws-training
+    Description: Value for the standard ManagedBy resource tag.
+    MinLength: 1
+    MaxLength: 256
+
+Resources:
+  TrainingQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      SqsManagedSseEnabled: true
+      VisibilityTimeout: !Ref VisibilityTimeoutSeconds
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTagValue
+        - Key: Environment
+          Value: !Ref EnvironmentTagValue
+        - Key: ManagedBy
+          Value: !Ref ManagedByTagValue
+        - Key: Lab
+          Value: 001-cloudformation-lifecycle
+
+Outputs:
+  QueueArn:
+    Description: ARN of the temporary training queue.
+    Value: !GetAtt TrainingQueue.Arn
+  QueueUrl:
+    Description: URL of the temporary training queue.
+    Value: !Ref TrainingQueue

@@ -41,12 +41,17 @@ repository to one AWS account. Initial Examiner governance and its session
 prompt are also
 implemented without mode-specific persistent working memory; examination
 context is reconstructed from canonical exercise material, trainee evidence,
-and authorized current observations. Native CloudFormation source defines the
-first shared infrastructure component, a persistent S3 store for packaged
-Lambda artifacts, with an isolated uv-locked `cfn-lint` environment for local
-validation. Drillmaster governance and its session prompt are not yet
-implemented. No repository-wide infrastructure-as-code choice, broader
-shared-infrastructure design, lab framework, or lab contract is selected yet.
+and authorized current observations. The first trainee-operated practical lab
+uses a temporary SQS queue to teach account and Region preflight, local
+CloudFormation validation, create and update observation, evidence provenance,
+and verified cleanup. It establishes only the conventions needed by that
+exercise rather than a general lab framework. Native CloudFormation source
+also defines the first shared infrastructure component, a persistent S3 store
+for packaged Lambda artifacts, with an isolated uv-locked `cfn-lint`
+environment for local validation. Drillmaster governance and its session
+prompt are not yet implemented. No repository-wide infrastructure-as-code
+choice, broader shared-infrastructure design, or general lab contract is
+selected yet.
 
 ## Handoff boundary
 
