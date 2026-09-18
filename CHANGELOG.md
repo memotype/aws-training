@@ -9,10 +9,14 @@ This file records curated material changes included in tagged project
 milestones and the material changes currently being prepared for the next
 milestone.
 
-## Unreleased
+## v0.3.0 - 2026-09-18
 
 ### Added
 
+- The first trainee-operated practical lab, covering identity and Region
+  preflight, local CloudFormation validation, deployment and event inspection,
+  an in-place SQS queue configuration update, evidence collection, and verified
+  stack and resource cleanup.
 - Native CloudFormation source for a persistent, private, versioned, SSE-S3
   Lambda artifact bucket with bounded noncurrent-version and incomplete-upload
   retention, explicit retained-resource behavior, and reproducible uv-locked

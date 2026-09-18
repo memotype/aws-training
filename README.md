@@ -21,10 +21,11 @@ deliberate.
 
 ## Current Status
 
-The project is in its initial infrastructure implementation phase.
-Practical labs and
-Drillmaster mode are **not implemented yet**. Repository source includes the
-first shared infrastructure component, but no AWS deployment is established.
+The project is in its initial infrastructure and practical-training phase.
+The first guided CloudFormation lifecycle lab is implemented. Drillmaster mode
+and controlled fault-injection exercises are **not implemented yet**.
+Repository source includes the first shared infrastructure component, but no
+AWS deployment is established.
 
 Maintainer and Examiner modes, operator-local configuration, local validation,
 licensing checks, project-scoped AWS knowledge access, and native
@@ -111,6 +112,10 @@ Before beginning governed work:
   require authorized AWS access. Credentials are not a routine repository
   prerequisite.
 
+The first exercise is
+[Lab 001: CloudFormation Lifecycle](labs/001-cloudformation-lifecycle/README.md).
+Read its complete scope and safety contract before running any AWS command.
+
 ## Repository Structure
 
 | Path | Purpose |
@@ -120,6 +125,7 @@ Before beginning governed work:
 | `.aws-training.example.toml` | Safe tracked template for per-clone operator parameters. |
 | `docs/standards/` | Canonical repository configuration and operational standards. |
 | `infra/artifact-store/` | Native CloudFormation source for the shared Lambda artifact bucket. |
+| `labs/` | Trainee-operated practical exercises with safety, evidence, and cleanup contracts. |
 | `.codex/config.toml` | Project-scoped AWS knowledge integration for Codex. |
 | `tools/aws_training_config.py` | Shared offline TOML reader and validator. |
 | `tools/cloudformation/` | Pinned CloudFormation linting environment. |
@@ -130,8 +136,10 @@ Before beginning governed work:
 
 Governance reserves `infra/` for shared training-range infrastructure, `labs/`
 for trainee exercises, and `docs/architecture/` for architecture material. The
-artifact-store template is the first tracked shared-infrastructure source;
-`labs/` and `docs/architecture/` do not yet contain tracked implementations.
+artifact-store template is the first tracked shared-infrastructure source. The
+first [practical lab](labs/001-cloudformation-lifecycle/README.md) covers a
+temporary SQS queue's CloudFormation create, observe, update, and cleanup
+lifecycle. `docs/architecture/` does not yet contain a tracked implementation.
 The `docs/standards/` directory contains the operator-configuration contract.
 
 ## Local Configuration and Runtime State
